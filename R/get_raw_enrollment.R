@@ -238,26 +238,59 @@ build_alternate_urls <- function(end_year, school_year, level, data_type, count_
     paste0(school_year, "-active-student-headcount")
   )
 
-  # Various file naming patterns
+  # Build the year string without hyphen (e.g., "201314" from "2013-14")
+  school_year_compact <- gsub("-", "", school_year)
+
+  # Various file naming patterns - these have changed significantly over the years
   if (data_type == "grade") {
     file_patterns <- c(
+      # Modern patterns (2021+)
       paste0(count_day, "-day-", level, "-headcount-by-grade"),
-      paste0(count_day, "thday", level, "headcountbygrade"),
-      paste0(count_day, "thday", level, "-headcount-by-grade-", school_year),
-      paste0(count_day, "thday", level, "headcountbygrade", gsub("-", "", school_year)),
       paste0(count_day, "-day-", level, "-headcount-by-grade-", school_year),
-      paste0(count_day, "th-day-", level, "-headcount-by-grade-", school_year)
+
+      # 2015-2020 patterns (e.g., 45thdayschoolheadcountbygrade2015-16)
+      paste0(count_day, "thday", level, "headcountbygrade", school_year),
+      paste0(count_day, "thday", level, "headcountbygrade", school_year_compact),
+      paste0(count_day, "thday", level, "-headcount-by-grade-", school_year),
+
+      # 2012-2014 patterns (e.g., 2012-13-45day-school-activeheadcountbygrade)
+      paste0(school_year, "-", count_day, "day-", level, "-activeheadcountbygrade"),
+      paste0(school_year, "-", count_day, "day-", level, "-activeheadcountbygrade-xls"),
+      paste0(school_year, "-", count_day, "day-", level, "-activeheadcountbygrade-xlsx"),
+
+      # Additional variations
+      paste0(count_day, "th-day-", level, "-headcount-by-grade-", school_year),
+      paste0(level, "-headcount-by-grade-", school_year),
+      paste0(level, "-headcount-by-grade")
     )
   } else {
     file_patterns <- c(
+      # Modern patterns (2021+)
       paste0(count_day, "-day-", level, "-headcount-by-gender-ethnicity-and-pupils-in-poverty"),
+      paste0(count_day, "-day-", level, "-headcount-by-gender-ethnicity-and-pupils-in-poverty-", school_year),
+
+      # 2015-2020 patterns
       paste0(count_day, "-day-", level, "-headcount-by-gender-and-ethnicity"),
+      paste0(count_day, "-day-", level, "-headcount-by-gender-and-ethnicity-", school_year),
+      paste0(count_day, "thday", level, "headcountbygenderethnicity", school_year),
+      paste0(count_day, "thday", level, "headcountbygenderandrace", school_year),
+      paste0(count_day, "thday", level, "headcountbygenderrace", school_year),
+      paste0(count_day, "thday", level, "headcountbygenderrace", school_year_compact),
+
+      # 2012-2014 patterns (e.g., 2012-13-180day-school-activeheadcountbygenderrace)
+      paste0(school_year, "-", count_day, "day-", level, "-activeheadcountbygenderrace"),
+      paste0(school_year, "-", count_day, "day-", level, "-activeheadcountbygenderrace-xls"),
+      paste0(school_year, "-", count_day, "day-", level, "-activeheadcountbygenderrace-xlsx"),
+      paste0(school_year, "-", count_day, "day-", level, "-activeheadcountbygenderlunchstatusandrace"),
+      paste0(school_year, "-", count_day, "day-", level, "-activeheadcountbygenderlunchstatusandrace-xls"),
+
+      # Additional variations with different separators
       paste0(count_day, "-day-", level, "-headcount-by-gender-race"),
-      paste0(count_day, "thday", level, "headcountbygenderrace"),
       paste0(count_day, "thday", level, "-by-gender-race-", school_year),
-      paste0(count_day, "thday", level, "headcountbygenderrace", gsub("-", "", school_year)),
       paste0(count_day, "th-day-", level, "-headcount-by-gender-lunch-status-and-race-", school_year),
-      paste0(count_day, "thday", level, "-by-gender-race-lunch-", school_year)
+      paste0(count_day, "thday", level, "-by-gender-race-lunch-", school_year),
+      paste0(level, "-headcount-by-gender-ethnicity-and-pupils-in-poverty"),
+      paste0(level, "-headcount-by-gender-and-ethnicity-", school_year)
     )
   }
 
@@ -277,6 +310,7 @@ build_alternate_urls <- function(end_year, school_year, level, data_type, count_
 #' Read headcount Excel file
 #'
 #' Parses the SCDE headcount Excel file which has a non-standard header structure.
+#' The file has 5-7 rows of metadata/headers before the data starts.
 #'
 #' @param file_path Path to Excel file
 #' @param level "school" or "district"
@@ -285,11 +319,33 @@ build_alternate_urls <- function(end_year, school_year, level, data_type, count_
 #' @keywords internal
 read_headcount_excel <- function(file_path, level, data_type) {
 
-  # Read raw data skipping header rows (typically 5-6 rows of metadata)
-  df <- readxl::read_excel(file_path, sheet = 1, skip = 6, col_names = FALSE)
+  # First, read the file to find where data starts
+  # Look for the first row that starts with a school ID (numeric) or district name
+  raw <- readxl::read_excel(file_path, sheet = 1, col_names = FALSE)
 
-  # Get header rows to determine column names
-  header_rows <- readxl::read_excel(file_path, sheet = 1, n_max = 7, col_names = FALSE)
+  # Find the header row (contains "School ID" or "District")
+  header_row <- which(sapply(1:min(15, nrow(raw)), function(i) {
+    first_val <- as.character(raw[i, 1])
+    !is.na(first_val) && (grepl("School ID|District", first_val, ignore.case = TRUE))
+  }))
+
+  if (length(header_row) == 0) {
+    # Default to row 6 if we can't find header
+    header_row <- 6
+  } else {
+    header_row <- header_row[1]
+  }
+
+  # Data starts after the header row (which may span 2 rows for grades)
+  # For grade files, there's a second header row with grade labels
+  if (data_type == "grade") {
+    data_start <- header_row + 2  # Skip main header + grade labels row
+  } else {
+    data_start <- header_row + 2  # Skip main header + subheader row
+  }
+
+  # Re-read skipping header rows
+  df <- readxl::read_excel(file_path, sheet = 1, skip = data_start - 1, col_names = FALSE)
 
   # Determine column names based on data type
   if (data_type == "grade") {
@@ -310,12 +366,20 @@ read_headcount_excel <- function(file_path, level, data_type) {
     names(df) <- col_names[1:ncol(df)]
   }
 
-  # Remove rows with NA school/district ID
-  id_col <- if (level == "school") "school_id" else "district_name"
-  df <- df[!is.na(df[[id_col]]) & df[[id_col]] != "", ]
+  # Remove rows with NA IDs or with header text
+  if (level == "school") {
+    id_col <- "school_id"
+    # School IDs should be numeric 7-digit codes
+    df <- df[!is.na(df[[id_col]]) & grepl("^\\d{7}$", as.character(df[[id_col]])), ]
+  } else {
+    id_col <- "district_id"
+    # District IDs should be numeric 4-digit codes
+    df <- df[!is.na(df[[id_col]]) & grepl("^\\d{3,4}$", as.character(df[[id_col]])), ]
+  }
 
-  # Convert numeric columns
-  numeric_cols <- setdiff(names(df), c("school_id", "district_name", "school_name"))
+  # Convert numeric columns (keep IDs and names as character)
+  char_cols <- c("school_id", "district_id", "district_name", "school_name")
+  numeric_cols <- setdiff(names(df), char_cols)
   for (col in numeric_cols) {
     if (col %in% names(df)) {
       df[[col]] <- safe_numeric(df[[col]])
@@ -339,7 +403,8 @@ get_grade_column_names <- function(level) {
       "grade_05", "grade_06", "grade_07", "grade_08",
       "grade_09", "grade_10", "grade_11", "grade_12")
   } else {
-    c("district_name", "total",
+    # District file has district_id as first column
+    c("district_id", "district_name", "total",
       "grade_pk", "grade_k",
       "grade_01", "grade_02", "grade_03", "grade_04",
       "grade_05", "grade_06", "grade_07", "grade_08",
@@ -361,7 +426,8 @@ get_demo_column_names <- function(level) {
       "pacific_islander", "multiracial", "white",
       "econ_disadv", "not_econ_disadv")
   } else {
-    c("district_name", "total",
+    # District file has district_id as first column
+    c("district_id", "district_name", "total",
       "female", "male", "gender_missing",
       "black", "native_american", "asian", "hispanic",
       "pacific_islander", "multiracial", "white",

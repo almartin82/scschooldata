@@ -163,10 +163,12 @@ process_district_enr <- function(grade_df, demo_df, end_year) {
   )
 
   # District identifiers
+  if ("district_id" %in% names(grade_df)) {
+    result$district_id <- trimws(as.character(grade_df$district_id))
+  }
+
   if ("district_name" %in% names(grade_df)) {
     result$district_name <- clean_text(grade_df$district_name)
-    # Generate district ID from name (hash-based for consistency)
-    result$district_id <- sapply(result$district_name, generate_district_id)
   }
 
   # Campus ID is NA for district rows
@@ -194,8 +196,8 @@ process_district_enr <- function(grade_df, demo_df, end_year) {
 
   # Merge demographic data if available
   if (!is.null(demo_df) && nrow(demo_df) > 0) {
-    if ("district_name" %in% names(demo_df)) {
-      demo_df$district_name_clean <- clean_text(demo_df$district_name)
+    if ("district_id" %in% names(demo_df)) {
+      demo_df$district_id <- trimws(as.character(demo_df$district_id))
 
       demo_cols <- c(
         "female", "male",
@@ -206,9 +208,9 @@ process_district_enr <- function(grade_df, demo_df, end_year) {
 
       for (col in demo_cols) {
         if (col %in% names(demo_df)) {
-          # Create a lookup by cleaned district name
-          demo_lookup <- setNames(safe_numeric(demo_df[[col]]), demo_df$district_name_clean)
-          result[[col]] <- demo_lookup[result$district_name]
+          # Create a lookup by district ID
+          demo_lookup <- setNames(safe_numeric(demo_df[[col]]), demo_df$district_id)
+          result[[col]] <- demo_lookup[result$district_id]
         }
       }
     }

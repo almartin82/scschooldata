@@ -2,6 +2,15 @@
 # Utility Functions
 # ==============================================================================
 
+# Declare global variables to avoid R CMD check NOTEs
+utils::globalVariables(c(
+  "subgroup", "grade_level", "n_students", "row_total",
+  "type", "charter_flag", "is_state", "is_district", "is_campus", "is_charter"
+))
+
+#' @importFrom stats setNames
+NULL
+
 #' Pipe operator
 #'
 #' See \code{dplyr::\link[dplyr:reexports]{\%>\%}} for details.
@@ -40,14 +49,25 @@ safe_numeric <- function(x) {
 
 #' Get list of available years for SC enrollment data
 #'
-#' Returns the range of years available from SC Report Cards.
+#' Returns the range of years available from different SC data sources.
 #'
-#' @return Integer vector of available years
+#' @param source Which data source: "headcounts" (default) for Active Student
+#'   Headcounts (2013-2025), or "reportcards" for SC Report Cards (2018-2025).
+#' @return Integer vector of available years (end_year format, e.g., 2024 for 2023-24)
 #' @export
 #' @examples
 #' get_available_years()
-get_available_years <- function() {
-  # SC Report Cards data available from 2018-2025
-  # Active Student Headcounts goes back to 2016 but with different format
-  2018:2025
+#' get_available_years("headcounts")
+#' get_available_years("reportcards")
+get_available_years <- function(source = "headcounts") {
+  source <- match.arg(source, c("headcounts", "reportcards"))
+
+  if (source == "headcounts") {
+    # Active Student Headcounts available from 2012-13 through 2024-25
+    # Uses end_year convention (2013 = 2012-13 school year)
+    2013:2025
+  } else {
+    # SC Report Cards data available from 2018-2025
+    2018:2025
+  }
 }

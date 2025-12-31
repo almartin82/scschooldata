@@ -19,15 +19,30 @@ test_that("safe_numeric handles various inputs", {
 })
 
 test_that("get_available_years returns valid range", {
+  # Default source is headcounts (2013-2025)
   years <- get_available_years()
   expect_true(is.integer(years) || is.numeric(years))
-  expect_true(min(years) >= 2018)
+  expect_true(min(years) >= 2013)
   expect_true(max(years) <= 2026)
   expect_true(length(years) > 0)
+
+  # Headcounts source (2013-2025)
+  years_hc <- get_available_years("headcounts")
+  expect_equal(min(years_hc), 2013)
+  expect_true(max(years_hc) <= 2026)
+
+  # Report Cards source (2018-2025)
+  years_rc <- get_available_years("reportcards")
+  expect_equal(min(years_rc), 2018)
+  expect_true(max(years_rc) <= 2026)
 })
 
 test_that("fetch_enr validates year parameter", {
+  # Years before 2013 should error
+  expect_error(fetch_enr(2012), "end_year must be between")
   expect_error(fetch_enr(2010), "end_year must be between")
+  # Years after 2026 should error
+  expect_error(fetch_enr(2027), "end_year must be between")
   expect_error(fetch_enr(2030), "end_year must be between")
 })
 

@@ -11,3 +11,6 @@
 ^Meta$
 ^CLAUDE\.md$
 ^PRD\.md$
+^\.git$
+^\.gitignore$
+^\.\.Rcheck$
