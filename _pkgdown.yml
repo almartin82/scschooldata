@@ -1,0 +1,48 @@
+url: https://almartin82.github.io/scschooldata/
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left:  [intro, reference, articles]
+    right: [search, github]
+  components:
+    github:
+      icon: fab fa-github
+      href: https://github.com/almartin82/scschooldata
+
+reference:
+  - title: "Fetch Enrollment Data"
+    desc: "Functions for downloading enrollment data from SCDE"
+    contents:
+      - fetch_enr
+      - fetch_enr_multi
+      - fetch_report_cards
+      - get_available_years
+
+  - title: "Data Transformation"
+    desc: "Functions for transforming and analyzing enrollment data"
+    contents:
+      - tidy_enr
+      - id_enr_aggs
+      - enr_grade_aggs
+
+  - title: "Caching"
+    desc: "Functions for managing cached data"
+    contents:
+      - cache_status
+      - clear_cache
+
+  - title: "Utilities"
+    contents:
+      - pipe
+
+home:
+  links:
+    - text: SC Department of Education
+      href: https://ed.sc.gov/
+    - text: SC Report Cards
+      href: https://screportcards.com/
+    - text: Active Student Headcounts
+      href: https://ed.sc.gov/data/other/student-counts/active-student-headcounts/
