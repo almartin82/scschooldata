@@ -6,7 +6,6 @@
 .Ruserdata
 *.tar.gz
 *.Rcheck/
-..Rcheck/
 
 # IDE
 .idea/
