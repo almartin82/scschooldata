@@ -2,11 +2,12 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/almartin82/scschooldata/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/almartin82/scschooldata/actions/workflows/R-CMD-check.yaml)
+[![Python Tests](https://github.com/almartin82/scschooldata/actions/workflows/python-test.yaml/badge.svg)](https://github.com/almartin82/scschooldata/actions/workflows/python-test.yaml)
 <!-- badges: end -->
 
 **[Documentation](https://almartin82.github.io/scschooldata/)** | [GitHub](https://github.com/almartin82/scschooldata)
 
-An R package for accessing South Carolina school enrollment data from the South Carolina Department of Education (SCDE). **13 years of data** (2013-2025) for every school, district, and the state.
+Fetch and analyze South Carolina school enrollment data from the South Carolina Department of Education (SCDE) in R or Python. **13 years of data** (2013-2025) for every school, district, and the state.
 
 ## What can you find with scschooldata?
 
@@ -248,6 +249,8 @@ devtools::install_github("almartin82/scschooldata")
 
 ## Quick Start
 
+### R
+
 ```r
 library(scschooldata)
 library(dplyr)
@@ -270,6 +273,31 @@ enr |>
 
 # Get multiple years
 enr_multi <- fetch_enr_multi(2020:2025)
+```
+
+### Python
+
+```python
+import pyscschooldata as sc
+
+# Get 2025 enrollment data (2024-25 school year)
+df = sc.fetch_enr(2025)
+
+# Statewide total
+state_total = df[(df['is_state'] == True) &
+                 (df['subgroup'] == 'total_enrollment') &
+                 (df['grade_level'] == 'TOTAL')]['n_students'].values[0]
+print(f"Total enrollment: {state_total:,}")
+#> Total enrollment: 782,143
+
+# Top 10 districts
+districts = df[(df['is_district'] == True) &
+               (df['subgroup'] == 'total_enrollment') &
+               (df['grade_level'] == 'TOTAL')]
+print(districts.nlargest(10, 'n_students')[['district_name', 'n_students']])
+
+# Get multiple years
+df_multi = sc.fetch_enr_multi([2020, 2021, 2022, 2023, 2024, 2025])
 ```
 
 ## Data Availability
