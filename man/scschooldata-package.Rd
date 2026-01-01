@@ -5,7 +5,7 @@
 \alias{scschooldata-package}
 \title{scschooldata: Fetch and Process South Carolina School Data}
 \description{
-Downloads and processes school data from the South Carolina Department of Education (SCDE). Provides functions for fetching enrollment data from Active Student Headcounts and SC Report Cards, transforming it into tidy format for analysis. Supports data from 2018-present via SC Report Cards and 2016-present via Active Student Headcounts.
+Downloads and processes school data from the South Carolina Department of Education (SCDE). Provides functions for fetching enrollment data from Active Student Headcounts and SC Report Cards, transforming it into tidy format for analysis. Supports data from 2018-present via SC Report Cards and 2013-present via Active Student Headcounts.
 
 The scschooldata package provides functions for downloading, processing,
 and analyzing school enrollment data from the South Carolina Department
