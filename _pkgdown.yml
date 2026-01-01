@@ -34,9 +34,6 @@ reference:
       - cache_status
       - clear_cache
 
-  - title: "Utilities"
-    contents:
-      - pipe
 
 home:
   links:
