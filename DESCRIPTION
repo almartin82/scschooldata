@@ -1,15 +1,12 @@
 Package: scschooldata
-Title: Fetch and Process South Carolina School Data
+Title: South Carolina School Data
 Version: 0.1.0
 Authors@R:
     person("Al", "Martin", email = "almartin@example.com", role = c("aut", "cre"))
 Author: Al Martin [aut, cre]
 Maintainer: Al Martin <almartin@example.com>
-Description: Downloads and processes school data from the South Carolina
-    Department of Education (SCDE). Provides functions for fetching enrollment
-    data from Active Student Headcounts and SC Report Cards, transforming it
-    into tidy format for analysis. Supports data from 2018-present via
-    SC Report Cards and 2013-present via Active Student Headcounts.
+Description: A simple, consistent interface for accessing South Carolina
+    school data in R.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
