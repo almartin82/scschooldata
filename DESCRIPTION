@@ -6,7 +6,7 @@ Authors@R:
 Author: Al Martin [aut, cre]
 Maintainer: Al Martin <almartin@example.com>
 Description: A simple, consistent interface for accessing South Carolina
-    school data in R.
+    school data in Python and R.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
