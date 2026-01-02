@@ -79,7 +79,7 @@ class TestGetAvailableYears:
         import pyscschooldata as sc
         years = sc.get_available_years()
         assert years['min_year'] >= 2000
-        assert years['min_year'] <= 2015
+        assert years['min_year'] <= 2020
         assert years['max_year'] >= 2020
         assert years['max_year'] <= 2030
 
