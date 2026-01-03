@@ -24,6 +24,8 @@ Meta/
 
 # Vignettes
 inst/doc/
+vignettes/*.R
+vignettes/*.html
 
 # Cache (for development)
 /cache/
