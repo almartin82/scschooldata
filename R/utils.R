@@ -40,7 +40,7 @@ safe_numeric <- function(x) {
 #' Returns the range of years available from different SC data sources.
 #'
 #' @param source Which data source: "headcounts" (default) for Active Student
-#'   Headcounts (2013-2025), or "reportcards" for SC Report Cards (2018-2025).
+#'   Headcounts (2013-2024), or "reportcards" for SC Report Cards (2018-2024).
 #' @return Integer vector of available years (end_year format, e.g., 2024 for 2023-24)
 #' @export
 #' @examples
@@ -51,11 +51,11 @@ get_available_years <- function(source = "headcounts") {
   source <- match.arg(source, c("headcounts", "reportcards"))
 
   if (source == "headcounts") {
-    # Active Student Headcounts available from 2012-13 through 2024-25
+    # Active Student Headcounts available from 2012-13 through 2023-24
     # Uses end_year convention (2013 = 2012-13 school year)
-    2013:2025
+    2013:2024
   } else {
-    # SC Report Cards data available from 2018-2025
-    2018:2025
+    # SC Report Cards data available from 2018-2024
+    2018:2024
   }
 }
