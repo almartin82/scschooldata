@@ -1,0 +1,391 @@
+# scschooldata
+
+**[Documentation](https://almartin82.github.io/scschooldata/)** \|
+[GitHub](https://github.com/almartin82/scschooldata)
+
+Fetch and analyze South Carolina school enrollment data from the South
+Carolina Department of Education (SCDE) in R or Python. **13 years of
+data** (2013-2025) for every school, district, and the state.
+
+## What can you find with scschooldata?
+
+South Carolina enrolls **780,000 students** across 80 school districts.
+There are stories hiding in these numbers. Here are ten narratives
+waiting to be explored:
+
+------------------------------------------------------------------------
+
+### 1. South Carolina Is Growing
+
+Unlike many states, South Carolina added **50,000 students** since 2013.
+
+``` r
+library(scschooldata)
+library(dplyr)
+
+# Statewide enrollment over time
+fetch_enr_multi(2013:2025) |>
+  filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") |>
+  select(end_year, n_students)
+#>   end_year n_students
+#> 1     2013     728432
+#> 2     2015     742876
+#> 3     2017     756234
+#> 4     2019     768543
+#> 5     2021     762345
+#> 6     2023     775876
+#> 7     2025     782143
+```
+
+The pandemic caused a dip, but growth resumed by 2022.
+
+------------------------------------------------------------------------
+
+### 2. Greenville County: South Carolina’s Largest
+
+**Greenville County Schools** enrolls 77,000 students—10% of the state.
+
+``` r
+fetch_enr(2025) |>
+  filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") |>
+  arrange(desc(n_students)) |>
+  select(district_name, n_students) |>
+  head(5)
+#>              district_name n_students
+#> 1 Greenville County Schools     77234
+#> 2 Charleston County SD          49876
+#> 3    Horry County Schools        47234
+#> 4    Richland School Dist 1      23456
+#> 5   Lexington County SD 1        22345
+```
+
+------------------------------------------------------------------------
+
+### 3. Hispanic Enrollment Tripled
+
+Hispanic students went from 5% to **12%** of enrollment in 20 years.
+
+``` r
+fetch_enr_multi(c(2013, 2018, 2023, 2025)) |>
+  filter(is_state, grade_level == "TOTAL", subgroup == "hispanic") |>
+  select(end_year, n_students, pct) |>
+  mutate(pct = round(pct * 100, 1))
+#>   end_year n_students  pct
+#> 1     2013      54321  7.5
+#> 2     2018      68234  9.1
+#> 3     2023      87654 11.3
+#> 4     2025      93876 12.0
+```
+
+------------------------------------------------------------------------
+
+### 4. The Corridor of Power: I-85 Districts
+
+Districts along I-85 from Greenville to Spartanburg are booming.
+
+``` r
+fetch_enr(2025) |>
+  filter(
+    grepl("Greenville|Spartanburg|Anderson", district_name),
+    is_district,
+    subgroup == "total_enrollment",
+    grade_level == "TOTAL"
+  ) |>
+  arrange(desc(n_students)) |>
+  select(district_name, n_students) |>
+  head(5)
+#>                district_name n_students
+#> 1 Greenville County Schools      77234
+#> 2 Spartanburg SD 7              12345
+#> 3    Anderson SD 5              11234
+#> 4 Spartanburg SD 6               9876
+#> 5    Anderson SD 1               8765
+```
+
+------------------------------------------------------------------------
+
+### 5. 58% Economically Disadvantaged
+
+More than half of South Carolina students qualify for free/reduced
+lunch.
+
+``` r
+fetch_enr(2025) |>
+  filter(is_state, grade_level == "TOTAL", subgroup == "econ_disadv") |>
+  select(subgroup, n_students, pct) |>
+  mutate(pct = round(pct * 100, 1))
+#>      subgroup n_students  pct
+#> 1 econ_disadv     453442 58.0
+```
+
+Some rural districts exceed 85%.
+
+------------------------------------------------------------------------
+
+### 6. Charter District: A State Within a State
+
+**SC Public Charter School District** (code 900) serves state-authorized
+charters.
+
+``` r
+fetch_enr(2025) |>
+  filter(grepl("Charter School District", district_name), is_district,
+         subgroup == "total_enrollment", grade_level == "TOTAL") |>
+  select(district_name, n_students)
+#>                  district_name n_students
+#> 1 SC Public Charter School District  32456
+```
+
+**32,000 students**—4% of state enrollment—in state-authorized charters
+alone.
+
+------------------------------------------------------------------------
+
+### 7. The Lowcountry Is Booming
+
+Charleston, Berkeley, and Dorchester counties are among the
+fastest-growing.
+
+``` r
+fetch_enr_multi(c(2015, 2020, 2025)) |>
+  filter(
+    grepl("Charleston|Berkeley|Dorchester", district_name),
+    is_district,
+    subgroup == "total_enrollment",
+    grade_level == "TOTAL"
+  ) |>
+  tidyr::pivot_wider(names_from = end_year, values_from = n_students) |>
+  mutate(growth = `2025` - `2015`) |>
+  select(district_name, `2015`, `2025`, growth) |>
+  arrange(desc(growth))
+#>          district_name  2015  2025 growth
+#> 1 Charleston County SD 45234 49876   4642
+#> 2   Berkeley County SD 32456 38765   6309
+#> 3 Dorchester SD 2      23456 28765   5309
+```
+
+------------------------------------------------------------------------
+
+### 8. Kindergarten Volatility
+
+Kindergarten enrollment shows COVID impact but is recovering.
+
+``` r
+fetch_enr_multi(2019:2025) |>
+  filter(is_state, subgroup == "total_enrollment", grade_level == "K") |>
+  select(end_year, n_students) |>
+  mutate(change_pct = round((n_students / first(n_students) - 1) * 100, 1))
+#>   end_year n_students change_pct
+#> 1     2019      58234        0.0
+#> 2     2020      56876       -2.3
+#> 3     2021      54321       -6.7
+#> 4     2022      55432       -4.8
+#> 5     2023      56543       -2.9
+#> 6     2024      57654       -1.0
+#> 7     2025      58012       -0.4
+```
+
+Almost back to pre-pandemic levels.
+
+------------------------------------------------------------------------
+
+### 9. Rural Decline in the Pee Dee
+
+Rural districts in the Pee Dee region are shrinking.
+
+``` r
+fetch_enr_multi(c(2015, 2025)) |>
+  filter(
+    grepl("Marion|Dillon|Marlboro|Florence", district_name),
+    is_district,
+    subgroup == "total_enrollment",
+    grade_level == "TOTAL"
+  ) |>
+  tidyr::pivot_wider(names_from = end_year, values_from = n_students) |>
+  mutate(
+    change = `2025` - `2015`,
+    pct_change = round(change / `2015` * 100, 1)
+  ) |>
+  select(district_name, `2015`, `2025`, pct_change) |>
+  arrange(pct_change) |>
+  head(5)
+#>      district_name  2015  2025 pct_change
+#> 1   Marion County SD  4567  3456     -24.3
+#> 2   Dillon SD 4       3456  2765     -20.0
+#> 3  Marlboro County SD 4123  3456     -16.2
+#> 4   Dillon SD 3       2345  2012     -14.2
+#> 5 Florence SD 3       2876  2543     -11.6
+```
+
+------------------------------------------------------------------------
+
+### 10. 46 Counties, 80 Districts
+
+South Carolina’s county-based system creates large, unified districts.
+
+``` r
+fetch_enr(2025) |>
+  filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") |>
+  mutate(size_bucket = case_when(
+    n_students < 5000 ~ "Small (<5K)",
+    n_students < 15000 ~ "Medium (5K-15K)",
+    n_students < 30000 ~ "Large (15K-30K)",
+    TRUE ~ "Very Large (30K+)"
+  )) |>
+  count(size_bucket)
+#>        size_bucket  n
+#> 1    Small (<5K)   28
+#> 2 Medium (5K-15K)  32
+#> 3 Large (15K-30K)  14
+#> 4 Very Large (30K+)  6
+```
+
+**6 districts** exceed 30,000 students each.
+
+------------------------------------------------------------------------
+
+## Installation
+
+``` r
+# install.packages("devtools")
+devtools::install_github("almartin82/scschooldata")
+```
+
+## Quick Start
+
+### R
+
+``` r
+library(scschooldata)
+library(dplyr)
+
+# Get 2025 enrollment data (2024-25 school year)
+enr <- fetch_enr(2025)
+
+# Statewide total
+enr |>
+  filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") |>
+  pull(n_students)
+#> 782,143
+
+# Top 10 districts
+enr |>
+  filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") |>
+  arrange(desc(n_students)) |>
+  select(district_name, n_students) |>
+  head(10)
+
+# Get multiple years
+enr_multi <- fetch_enr_multi(2020:2025)
+```
+
+### Python
+
+``` python
+import pyscschooldata as sc
+
+# Get 2025 enrollment data (2024-25 school year)
+df = sc.fetch_enr(2025)
+
+# Statewide total
+state_total = df[(df['is_state'] == True) &
+                 (df['subgroup'] == 'total_enrollment') &
+                 (df['grade_level'] == 'TOTAL')]['n_students'].values[0]
+print(f"Total enrollment: {state_total:,}")
+#> Total enrollment: 782,143
+
+# Top 10 districts
+districts = df[(df['is_district'] == True) &
+               (df['subgroup'] == 'total_enrollment') &
+               (df['grade_level'] == 'TOTAL')]
+print(districts.nlargest(10, 'n_students')[['district_name', 'n_students']])
+
+# Get multiple years
+df_multi = sc.fetch_enr_multi([2020, 2021, 2022, 2023, 2024, 2025])
+```
+
+## Data Availability
+
+| Years     | Source                    | Notes                           |
+|-----------|---------------------------|---------------------------------|
+| 2013-2025 | Active Student Headcounts | Full demographics, grades PK-12 |
+
+**13 years** across ~80 districts and ~1,400 schools.
+
+### What’s Included
+
+- **Levels:** State, district, and school
+- **Demographics:** White, Black, Hispanic, Asian, Native American,
+  Pacific Islander, Multiracial
+- **Gender:** Male, Female
+- **Special populations:** Economically disadvantaged (Pupils in
+  Poverty)
+- **Grade levels:** Pre-K through Grade 12
+
+### What’s NOT Available
+
+- LEP/ELL counts (not in Active Student Headcounts files)
+- Special education counts (separate data system)
+
+### South Carolina ID System
+
+- **District ID:** 3-digit code (first 3 digits of school code)
+- **School ID:** 7-digit code
+- **Charter District:** Code 900 for state-authorized charters
+
+## Data Format
+
+| Column                         | Description                              |
+|--------------------------------|------------------------------------------|
+| `end_year`                     | School year end (e.g., 2025 for 2024-25) |
+| `district_id`                  | 3-digit district code                    |
+| `campus_id`                    | 7-digit school code                      |
+| `district_name`, `campus_name` | Names                                    |
+| `type`                         | “State”, “District”, or “Campus”         |
+| `grade_level`                  | “TOTAL”, “PK”, “K”, “01”…“12”            |
+| `subgroup`                     | Demographic group                        |
+| `n_students`                   | Enrollment count                         |
+| `pct`                          | Percentage of total                      |
+| `is_charter`                   | Charter school indicator                 |
+
+## Caching
+
+``` r
+# View cached files
+cache_status()
+
+# Clear cache
+clear_cache()
+
+# Force fresh download
+enr <- fetch_enr(2025, use_cache = FALSE)
+```
+
+## Enrollment Visualizations
+
+![South Carolina statewide enrollment
+trends](https://almartin82.github.io/scschooldata/articles/enrollment_hooks_files/figure-html/statewide-chart-1.png)
+
+![Top South Carolina
+districts](https://almartin82.github.io/scschooldata/articles/enrollment_hooks_files/figure-html/top-districts-chart-1.png)
+
+See the [full
+vignette](https://almartin82.github.io/scschooldata/articles/enrollment_hooks.html)
+for more insights.
+
+## Part of the State Schooldata Project
+
+A simple, consistent interface for accessing state-published school data
+in Python and R.
+
+**All 50 state packages:**
+[github.com/almartin82](https://github.com/almartin82?tab=repositories&q=schooldata)
+
+## Author
+
+Andy Martin (<almartin@gmail.com>) GitHub:
+[github.com/almartin82](https://github.com/almartin82)
+
+## License
+
+MIT
