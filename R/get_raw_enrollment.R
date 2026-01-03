@@ -451,7 +451,8 @@ download_report_cards_data <- function(end_year) {
   }
 
   # Build URL - pattern varies slightly by year
-  school_year_short <- sprintf("%02d", (end_year - 1) %% 100)
+  # For end_year=2024, school year is "2023-24"
+  school_year_short <- sprintf("%02d", end_year %% 100)
   school_year_full <- paste0((end_year - 1), "-", school_year_short)
 
   if (end_year >= 2024) {
