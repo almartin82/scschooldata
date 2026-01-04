@@ -361,17 +361,11 @@ clear_cache()
 enr <- fetch_enr(2025, use_cache = FALSE)
 ```
 
-## Enrollment Visualizations
-
-![South Carolina statewide enrollment
-trends](https://almartin82.github.io/scschooldata/articles/enrollment_hooks_files/figure-html/statewide-chart-1.png)
-
-![Top South Carolina
-districts](https://almartin82.github.io/scschooldata/articles/enrollment_hooks_files/figure-html/top-districts-chart-1.png)
+## More Insights
 
 See the [full
 vignette](https://almartin82.github.io/scschooldata/articles/enrollment_hooks.html)
-for more insights.
+for additional analysis and visualizations.
 
 ## Part of the State Schooldata Project
 
