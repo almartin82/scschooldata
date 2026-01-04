@@ -8,6 +8,11 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
+# Vignettes require network access and working data sources
+# Only run if explicitly enabled via SCSCHOOLDATA_RUN_VIGNETTES=true
+# This prevents vignette failures during R CMD check
+run_vignette <- identical(Sys.getenv("SCSCHOOLDATA_RUN_VIGNETTES"), "true")
+
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -15,7 +20,7 @@ knitr::opts_chunk$set(
   warning = FALSE,
   fig.width = 8,
   fig.height = 5,
-  eval = !identical(Sys.getenv("CI"), "true")
+  eval = run_vignette
 )
 ```
 
