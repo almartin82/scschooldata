@@ -3,9 +3,9 @@
 \docType{package}
 \name{scschooldata-package}
 \alias{scschooldata-package}
-\title{scschooldata: Fetch and Process South Carolina School Data}
+\title{scschooldata: South Carolina School Data}
 \description{
-Downloads and processes school data from the South Carolina Department of Education (SCDE). Provides functions for fetching enrollment data from Active Student Headcounts and SC Report Cards, transforming it into tidy format for analysis. Supports data from 2018-present via SC Report Cards and 2013-present via Active Student Headcounts.
+A simple, consistent interface for accessing South Carolina school data in Python and R.
 
 The scschooldata package provides functions for downloading, processing,
 and analyzing school enrollment data from the South Carolina Department
@@ -43,6 +43,7 @@ to remove them.
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://almartin82.github.io/scschooldata}
   \item \url{https://github.com/almartin82/scschooldata}
   \item Report bugs at \url{https://github.com/almartin82/scschooldata/issues}
 }
@@ -50,6 +51,7 @@ Useful links:
 
 Useful links:
 \itemize{
+  \item \url{https://almartin82.github.io/scschooldata}
   \item \url{https://github.com/almartin82/scschooldata}
   \item Report bugs at \url{https://github.com/almartin82/scschooldata/issues}
 }
