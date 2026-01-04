@@ -15,10 +15,11 @@ Depends:
     R (>= 4.0)
 Imports:
     dplyr,
-    readxl,
-    purrr,
     httr,
-    rappdirs
+    purrr,
+    rappdirs,
+    readxl,
+    rlang
 Suggests:
     testthat (>= 3.0.0),
     knitr,

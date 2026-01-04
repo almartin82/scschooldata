@@ -8,7 +8,7 @@ get_available_years(source = "headcounts")
 }
 \arguments{
 \item{source}{Which data source: "headcounts" (default) for Active Student
-Headcounts (2013-2025), or "reportcards" for SC Report Cards (2018-2025).}
+Headcounts (2013-2024), or "reportcards" for SC Report Cards (2018-2024).}
 }
 \value{
 Integer vector of available years (end_year format, e.g., 2024 for 2023-24)
