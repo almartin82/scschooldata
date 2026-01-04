@@ -3,6 +3,7 @@
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/almartin82/scschooldata/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/almartin82/scschooldata/actions/workflows/R-CMD-check.yaml)
 [![Python Tests](https://github.com/almartin82/scschooldata/actions/workflows/python-test.yaml/badge.svg)](https://github.com/almartin82/scschooldata/actions/workflows/python-test.yaml)
+[![pkgdown](https://github.com/almartin82/scschooldata/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/almartin82/scschooldata/actions/workflows/pkgdown.yaml)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
@@ -356,13 +357,9 @@ clear_cache()
 enr <- fetch_enr(2025, use_cache = FALSE)
 ```
 
-## Enrollment Visualizations
+## More Insights
 
-<img src="https://almartin82.github.io/scschooldata/articles/enrollment_hooks_files/figure-html/statewide-chart-1.png" alt="South Carolina statewide enrollment trends" width="600">
-
-<img src="https://almartin82.github.io/scschooldata/articles/enrollment_hooks_files/figure-html/top-districts-chart-1.png" alt="Top South Carolina districts" width="600">
-
-See the [full vignette](https://almartin82.github.io/scschooldata/articles/enrollment_hooks.html) for more insights.
+See the [full vignette](https://almartin82.github.io/scschooldata/articles/enrollment_hooks.html) for additional analysis and visualizations.
 
 ## Part of the State Schooldata Project
 
