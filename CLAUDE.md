@@ -7,11 +7,10 @@
 
 # Claude Code Instructions
 
-## Git Commits and PRs
-- NEVER reference Claude, Claude Code, or AI assistance in commit messages
-- NEVER reference Claude, Claude Code, or AI assistance in PR descriptions
-- NEVER add Co-Authored-By lines mentioning Claude or Anthropic
-- Keep commit messages focused on what changed, not how it was written
+### GIT COMMIT POLICY
+- Commits are allowed
+- NO Claude Code attribution, NO Co-Authored-By trailers, NO emojis
+- Write normal commit messages as if a human wrote them
 
 ---
 
@@ -71,7 +70,6 @@ devtools::test(filter = "pipeline-live")
 
 See `state-schooldata/CLAUDE.md` for complete testing framework documentation.
 
-
 ---
 
 ## Git Workflow (REQUIRED)
@@ -117,4 +115,3 @@ PRs auto-merge when ALL CI checks pass:
 - pkgdown build (vignettes must render)
 
 If CI fails, fix the issue and push - auto-merge triggers when checks pass.
-
