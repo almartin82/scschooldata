@@ -55,7 +55,7 @@ enr_fresh <- fetch_enr(2024, use_cache = FALSE)
 enr_180 <- fetch_enr(2024, count_day = "180")
 
 # Filter to specific district
-greenville <- enr_2024 %>%
+greenville <- enr_2024 |>
   dplyr::filter(grepl("Greenville", district_name))
 } # }
 ```

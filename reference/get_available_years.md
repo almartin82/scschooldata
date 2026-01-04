@@ -13,8 +13,8 @@ get_available_years(source = "headcounts")
 - source:
 
   Which data source: "headcounts" (default) for Active Student
-  Headcounts (2013-2025), or "reportcards" for SC Report Cards
-  (2018-2025).
+  Headcounts (2013-2024), or "reportcards" for SC Report Cards
+  (2018-2024).
 
 ## Value
 
@@ -25,9 +25,9 @@ Integer vector of available years (end_year format, e.g., 2024 for
 
 ``` r
 get_available_years()
-#>  [1] 2013 2014 2015 2016 2017 2018 2019 2020 2021 2022 2023 2024
+#>  [1] 2013 2014 2015 2016 2017 2018 2019 2020 2021 2022 2023 2024 2025 2026
 get_available_years("headcounts")
-#>  [1] 2013 2014 2015 2016 2017 2018 2019 2020 2021 2022 2023 2024
+#>  [1] 2013 2014 2015 2016 2017 2018 2019 2020 2021 2022 2023 2024 2025 2026
 get_available_years("reportcards")
-#> [1] 2018 2019 2020 2021 2022 2023 2024
+#> [1] 2018 2019 2020 2021 2022 2023 2024 2025
 ```
