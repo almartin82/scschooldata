@@ -11,9 +11,6 @@ utils::globalVariables(c(
 #' @importFrom stats setNames
 NULL
 
-#' @importFrom rlang .data
-NULL
-
 
 #' Convert to numeric, handling suppression markers
 #'
@@ -51,11 +48,12 @@ get_available_years <- function(source = "headcounts") {
   source <- match.arg(source, c("headcounts", "reportcards"))
 
   if (source == "headcounts") {
-    # Active Student Headcounts available from 2012-13 through 2023-24
+    # Active Student Headcounts available from 2012-13 through 2025-26
     # Uses end_year convention (2013 = 2012-13 school year)
-    2013:2024
+    # Note: Historical years (2013-2020) may have broken URLs due to SCDE site changes
+    2013:2026
   } else {
-    # SC Report Cards data available from 2018-2024
-    2018:2024
+    # SC Report Cards data available from 2018-2025
+    2018:2025
   }
 }
