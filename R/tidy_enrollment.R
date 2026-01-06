@@ -160,7 +160,14 @@ id_enr_aggs <- function(df) {
       is_campus = type == "Campus",
 
       # Charter detection - based on charter_flag column if available
-      is_charter = !is.na(charter_flag) & charter_flag == "Y"
+      is_charter = !is.na(charter_flag) & charter_flag == "Y",
+
+      # Aggregation flag based on ID presence
+      aggregation_flag = dplyr::case_when(
+        !is.na(district_id) & !is.na(campus_id) & district_id != "" & campus_id != "" ~ "campus",
+        !is.na(district_id) & district_id != "" ~ "district",
+        TRUE ~ "state"
+      )
     )
 }
 
