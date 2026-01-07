@@ -30,6 +30,5 @@
 #' \code{\link{cache_status}} to view cached files and \code{\link{clear_cache}}
 #' to remove them.
 #'
-#' @docType package
 #' @name scschooldata-package
 NULL
