@@ -22,7 +22,7 @@ approximately 50,000 students since 2013. The Palmetto State’s
 population growth is reflected in its schools.
 
 ``` r
-enr <- fetch_enr_multi(c(2013, 2015, 2017, 2019, 2021, 2023, 2025))
+enr <- fetch_enr_multi(c(2013, 2015, 2017, 2019, 2021, 2023, 2025, use_cache = TRUE))
 
 state_totals <- enr |>
   filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") |>
@@ -56,7 +56,7 @@ Greenville County Schools enrolls nearly 77,000 students, making it the
 largest district in the state and one of the largest in the Southeast.
 
 ``` r
-enr_2025 <- fetch_enr(2025)
+enr_2025 <- fetch_enr(2025, use_cache = TRUE)
 
 top_districts <- enr_2025 |>
   filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") |>
@@ -166,7 +166,7 @@ tri-county Lowcountry region, and all three have seen substantial
 enrollment growth.
 
 ``` r
-lowcountry_enr <- fetch_enr_multi(c(2015, 2020, 2025))
+lowcountry_enr <- fetch_enr_multi(c(2015, 2020, 2025, use_cache = TRUE))
 
 lowcountry <- lowcountry_enr |>
   filter(
@@ -255,7 +255,7 @@ The SC Public Charter School District (code 900) serves state-authorized
 charter schools and has grown to over 30,000 students.
 
 ``` r
-charter_enr <- fetch_enr_multi(c(2015, 2020, 2025))
+charter_enr <- fetch_enr_multi(c(2015, 2020, 2025, use_cache = TRUE))
 
 charter_trends <- charter_enr |>
   filter(
@@ -304,7 +304,7 @@ Kindergarten enrollment dropped sharply during the pandemic but is now
 recovering toward pre-pandemic levels.
 
 ``` r
-k_enr <- fetch_enr_multi(2019:2025)
+k_enr <- fetch_enr_multi(2019:2025, use_cache = TRUE)
 
 k_trends <- k_enr |>
   filter(is_state, subgroup == "total_enrollment", grade_level == "K") |>
@@ -342,7 +342,7 @@ While much of South Carolina grows, rural districts in the Pee Dee
 region face persistent enrollment decline.
 
 ``` r
-pee_dee_enr <- fetch_enr_multi(c(2015, 2025))
+pee_dee_enr <- fetch_enr_multi(c(2015, 2025, use_cache = TRUE))
 
 pee_dee <- pee_dee_enr |>
   filter(
@@ -431,7 +431,7 @@ districts have grown substantially while Richland districts have been
 more stable.
 
 ``` r
-columbia_enr <- fetch_enr_multi(c(2015, 2020, 2025))
+columbia_enr <- fetch_enr_multi(c(2015, 2020, 2025, use_cache = TRUE))
 
 columbia_districts <- columbia_enr |>
   filter(
@@ -606,7 +606,7 @@ change over the past decade, reflecting the city’s rapid growth and
 gentrification.
 
 ``` r
-charleston_demo <- fetch_enr_multi(c(2015, 2020, 2025))
+charleston_demo <- fetch_enr_multi(c(2015, 2020, 2025, use_cache = TRUE))
 
 charleston_demo_trends <- charleston_demo |>
   filter(
