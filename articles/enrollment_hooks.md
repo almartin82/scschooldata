@@ -22,7 +22,7 @@ approximately 50,000 students since 2013. The Palmetto State’s
 population growth is reflected in its schools.
 
 ``` r
-enr <- fetch_enr_multi(c(2013, 2015, 2017, 2019, 2021, 2023, 2025, use_cache = TRUE))
+enr <- fetch_enr_multi(c(2013, 2015, 2017, 2019, 2021, 2023, 2025), use_cache = TRUE)
 
 state_totals <- enr |>
   filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") |>
@@ -166,7 +166,7 @@ tri-county Lowcountry region, and all three have seen substantial
 enrollment growth.
 
 ``` r
-lowcountry_enr <- fetch_enr_multi(c(2015, 2020, 2025, use_cache = TRUE))
+lowcountry_enr <- fetch_enr_multi(c(2015, 2020, 2025), use_cache = TRUE)
 
 lowcountry <- lowcountry_enr |>
   filter(
@@ -255,7 +255,7 @@ The SC Public Charter School District (code 900) serves state-authorized
 charter schools and has grown to over 30,000 students.
 
 ``` r
-charter_enr <- fetch_enr_multi(c(2015, 2020, 2025, use_cache = TRUE))
+charter_enr <- fetch_enr_multi(c(2015, 2020, 2025), use_cache = TRUE)
 
 charter_trends <- charter_enr |>
   filter(
@@ -342,7 +342,7 @@ While much of South Carolina grows, rural districts in the Pee Dee
 region face persistent enrollment decline.
 
 ``` r
-pee_dee_enr <- fetch_enr_multi(c(2015, 2025, use_cache = TRUE))
+pee_dee_enr <- fetch_enr_multi(c(2015, 2025), use_cache = TRUE)
 
 pee_dee <- pee_dee_enr |>
   filter(
@@ -431,7 +431,7 @@ districts have grown substantially while Richland districts have been
 more stable.
 
 ``` r
-columbia_enr <- fetch_enr_multi(c(2015, 2020, 2025, use_cache = TRUE))
+columbia_enr <- fetch_enr_multi(c(2015, 2020, 2025), use_cache = TRUE)
 
 columbia_districts <- columbia_enr |>
   filter(
@@ -606,7 +606,7 @@ change over the past decade, reflecting the city’s rapid growth and
 gentrification.
 
 ``` r
-charleston_demo <- fetch_enr_multi(c(2015, 2020, 2025, use_cache = TRUE))
+charleston_demo <- fetch_enr_multi(c(2015, 2020, 2025), use_cache = TRUE)
 
 charleston_demo_trends <- charleston_demo |>
   filter(
@@ -666,3 +666,9 @@ decisions across the Palmetto State.
 *Data sourced from the South Carolina Department of Education [Active
 Student
 Headcounts](https://ed.sc.gov/data/other/student-counts/active-student-headcounts/).*
+
+------------------------------------------------------------------------
+
+``` r
+sessionInfo()
+```
