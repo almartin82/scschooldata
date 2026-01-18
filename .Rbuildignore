@@ -16,3 +16,4 @@
 ^\.gitignore$
 ^\.\.Rcheck$
 ^py.*schooldata$
+^vignettes/.*_cache$

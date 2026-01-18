@@ -43,7 +43,7 @@ This vignette explores South Carolina's public school enrollment data, surfacing
 Unlike many states facing enrollment decline, South Carolina has added approximately 50,000 students since 2013. The Palmetto State's population growth is reflected in its schools.
 
 ```{r statewide-trend}
-enr <- fetch_enr_multi(c(2013, 2015, 2017, 2019, 2021, 2023, 2025, use_cache = TRUE))
+enr <- fetch_enr_multi(c(2013, 2015, 2017, 2019, 2021, 2023, 2025), use_cache = TRUE)
 
 state_totals <- enr |>
   filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") |>
@@ -181,7 +181,7 @@ i85_districts |>
 Charleston, Berkeley, and Dorchester counties form South Carolina's tri-county Lowcountry region, and all three have seen substantial enrollment growth.
 
 ```{r lowcountry-growth}
-lowcountry_enr <- fetch_enr_multi(c(2015, 2020, 2025, use_cache = TRUE))
+lowcountry_enr <- fetch_enr_multi(c(2015, 2020, 2025), use_cache = TRUE)
 
 lowcountry <- lowcountry_enr |>
   filter(
@@ -268,7 +268,7 @@ econ_districts |>
 The SC Public Charter School District (code 900) serves state-authorized charter schools and has grown to over 30,000 students.
 
 ```{r charter-growth}
-charter_enr <- fetch_enr_multi(c(2015, 2020, 2025, use_cache = TRUE))
+charter_enr <- fetch_enr_multi(c(2015, 2020, 2025), use_cache = TRUE)
 
 charter_trends <- charter_enr |>
   filter(
@@ -353,7 +353,7 @@ k_trends |>
 While much of South Carolina grows, rural districts in the Pee Dee region face persistent enrollment decline.
 
 ```{r pee-dee}
-pee_dee_enr <- fetch_enr_multi(c(2015, 2025, use_cache = TRUE))
+pee_dee_enr <- fetch_enr_multi(c(2015, 2025), use_cache = TRUE)
 
 pee_dee <- pee_dee_enr |>
   filter(
@@ -438,7 +438,7 @@ district_sizes |>
 The Columbia metro area is split between Richland and Lexington counties, with very different enrollment trajectories. Lexington County districts have grown substantially while Richland districts have been more stable.
 
 ```{r columbia-metro}
-columbia_enr <- fetch_enr_multi(c(2015, 2020, 2025, use_cache = TRUE))
+columbia_enr <- fetch_enr_multi(c(2015, 2020, 2025), use_cache = TRUE)
 
 columbia_districts <- columbia_enr |>
   filter(
@@ -607,7 +607,7 @@ smallest |>
 Charleston County School District has undergone significant demographic change over the past decade, reflecting the city's rapid growth and gentrification.
 
 ```{r charleston-demographics}
-charleston_demo <- fetch_enr_multi(c(2015, 2020, 2025, use_cache = TRUE))
+charleston_demo <- fetch_enr_multi(c(2015, 2020, 2025), use_cache = TRUE)
 
 charleston_demo_trends <- charleston_demo |>
   filter(
@@ -659,3 +659,9 @@ These patterns shape school funding, facility planning, and policy decisions acr
 ---
 
 *Data sourced from the South Carolina Department of Education [Active Student Headcounts](https://ed.sc.gov/data/other/student-counts/active-student-headcounts/).*
+
+---
+
+```{r session-info}
+sessionInfo()
+```
