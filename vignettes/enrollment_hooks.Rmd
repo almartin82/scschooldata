@@ -659,3 +659,11 @@ These patterns shape school funding, facility planning, and policy decisions acr
 ---
 
 *Data sourced from the South Carolina Department of Education [Active Student Headcounts](https://ed.sc.gov/data/other/student-counts/active-student-headcounts/).*
+
+---
+
+## Session Info
+
+```{r session-info}
+sessionInfo()
+```
