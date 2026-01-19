@@ -669,6 +669,8 @@ Headcounts](https://ed.sc.gov/data/other/student-counts/active-student-headcount
 
 ------------------------------------------------------------------------
 
+## Session Info
+
 ``` r
 sessionInfo()
 ```
