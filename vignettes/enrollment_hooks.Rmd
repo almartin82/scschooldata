@@ -662,6 +662,8 @@ These patterns shape school funding, facility planning, and policy decisions acr
 
 ---
 
+## Session Info
+
 ```{r session-info}
 sessionInfo()
 ```
