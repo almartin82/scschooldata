@@ -2,6 +2,7 @@
 % Please edit documentation in R/scschooldata-package.R
 \docType{package}
 \name{scschooldata-package}
+\alias{scschooldata}
 \alias{scschooldata-package}
 \title{scschooldata: South Carolina School Data}
 \description{
@@ -41,14 +42,6 @@ to remove them.
 }
 
 \seealso{
-Useful links:
-\itemize{
-  \item \url{https://almartin82.github.io/scschooldata}
-  \item \url{https://github.com/almartin82/scschooldata}
-  \item Report bugs at \url{https://github.com/almartin82/scschooldata/issues}
-}
-
-
 Useful links:
 \itemize{
   \item \url{https://almartin82.github.io/scschooldata}
