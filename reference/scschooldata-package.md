@@ -55,14 +55,6 @@ Useful links:
 
 - Report bugs at <https://github.com/almartin82/scschooldata/issues>
 
-Useful links:
-
-- <https://almartin82.github.io/scschooldata>
-
-- <https://github.com/almartin82/scschooldata>
-
-- Report bugs at <https://github.com/almartin82/scschooldata/issues>
-
 ## Author
 
 **Maintainer**: Al Martin <almartin@example.com>
