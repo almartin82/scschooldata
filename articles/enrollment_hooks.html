@@ -415,7 +415,7 @@ massive county-wide operations serving tens of thousands.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">district_sizes</span> <span class="op">&lt;-</span> <span class="va">enr_2025</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>size_bucket <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>size_bucket <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>    <span class="va">n_students</span> <span class="op">&lt;</span> <span class="fl">5000</span> <span class="op">~</span> <span class="st">"Small (&lt;5K)"</span>,</span>
 <span>    <span class="va">n_students</span> <span class="op">&lt;</span> <span class="fl">15000</span> <span class="op">~</span> <span class="st">"Medium (5K-15K)"</span>,</span>
 <span>    <span class="va">n_students</span> <span class="op">&lt;</span> <span class="fl">30000</span> <span class="op">~</span> <span class="st">"Large (15K-30K)"</span>,</span>
@@ -541,7 +541,7 @@ This reflects retention, transfers, and dropouts.</p>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">grade_level</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    grade_label <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    grade_label <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"09"</span> <span class="op">~</span> <span class="st">"9th Grade"</span>,</span>
 <span>      <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"10"</span> <span class="op">~</span> <span class="st">"10th Grade"</span>,</span>
 <span>      <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"11"</span> <span class="op">~</span> <span class="st">"11th Grade"</span>,</span>
