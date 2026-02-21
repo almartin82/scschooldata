@@ -105,13 +105,26 @@ test_that("get_sc_district_codes returns named vector", {
   expect_true("Greenville County Schools" %in% names(codes))
 })
 
+# Helper: skip test if SC DOE (ed.sc.gov) is unreachable or returning errors.
+# The DOE site has intermittent outages and SSL issues that should not fail CI.
+skip_if_sc_doe_unavailable <- function(e) {
+  if (grepl("Failed to download|too small|HTTP error|SSL|timeout|connection|Could not resolve",
+            e$message, ignore.case = TRUE)) {
+    skip(paste("SC DOE (ed.sc.gov) unavailable:", e$message))
+  }
+  stop(e)
+}
+
 # Integration tests (require network access)
 test_that("fetch_enr downloads and processes data", {
   skip_on_cran()
   skip_if_offline()
 
-  # Use a recent year
-  result <- fetch_enr(2024, tidy = FALSE, use_cache = FALSE)
+  # Use a recent year; skip gracefully if DOE is down
+  result <- tryCatch(
+    fetch_enr(2024, tidy = FALSE, use_cache = FALSE),
+    error = skip_if_sc_doe_unavailable
+  )
 
   # Check structure
   expect_true(is.data.frame(result))
@@ -134,8 +147,11 @@ test_that("tidy_enr produces correct long format", {
   skip_on_cran()
   skip_if_offline()
 
-  # Get wide data
-  wide <- fetch_enr(2024, tidy = FALSE, use_cache = TRUE)
+  # Get wide data; skip gracefully if DOE is down
+  wide <- tryCatch(
+    fetch_enr(2024, tidy = FALSE, use_cache = TRUE),
+    error = skip_if_sc_doe_unavailable
+  )
 
   # Tidy it
   tidy_result <- tidy_enr(wide)
@@ -155,8 +171,11 @@ test_that("id_enr_aggs adds correct flags", {
   skip_on_cran()
   skip_if_offline()
 
-  # Get tidy data with aggregation flags
-  result <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
+  # Get tidy data with aggregation flags; skip gracefully if DOE is down
+  result <- tryCatch(
+    fetch_enr(2024, tidy = TRUE, use_cache = TRUE),
+    error = skip_if_sc_doe_unavailable
+  )
 
   # Check flags exist
   expect_true("is_state" %in% names(result))
@@ -179,8 +198,11 @@ test_that("fetch_enr_multi returns combined data", {
   skip_on_cran()
   skip_if_offline()
 
-  # Fetch 2 years
-  result <- fetch_enr_multi(2023:2024, tidy = TRUE, use_cache = TRUE)
+  # Fetch 2 years; skip gracefully if DOE is down
+  result <- tryCatch(
+    fetch_enr_multi(2023:2024, tidy = TRUE, use_cache = TRUE),
+    error = skip_if_sc_doe_unavailable
+  )
 
   # Should have both years
   expect_true(2023 %in% result$end_year)
@@ -219,7 +241,11 @@ test_that("enr_grade_aggs creates grade aggregates", {
   skip_on_cran()
   skip_if_offline()
 
-  tidy_data <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
+  # Skip gracefully if DOE is down
+  tidy_data <- tryCatch(
+    fetch_enr(2024, tidy = TRUE, use_cache = TRUE),
+    error = skip_if_sc_doe_unavailable
+  )
   aggs <- enr_grade_aggs(tidy_data)
 
   # Check grade level aggregates exist
