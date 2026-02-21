@@ -140,6 +140,25 @@
 <hr></div>
 </div>
 <div class="section level2">
+<h2 id="valid-filter-values-tidy-enrollment-via-fetch_enrtidy--true">Valid Filter Values (tidy enrollment via <code>fetch_enr(tidy = TRUE)</code>)<a class="anchor" aria-label="anchor" href="#valid-filter-values-tidy-enrollment-via-fetch_enrtidy--true"></a></h2>
+<div class="section level3">
+<h3 id="subgroup">subgroup<a class="anchor" aria-label="anchor" href="#subgroup"></a></h3>
+<p><code>total_enrollment</code>, <code>white</code>, <code>black</code>, <code>hispanic</code>, <code>asian</code>, <code>native_american</code>, <code>pacific_islander</code>, <code>multiracial</code>, <code>special_ed</code>, <code>lep</code>, <code>econ_disadv</code>, <code>male</code>, <code>female</code></p>
+<p><strong>NOT in tidy enrollment:</strong> SC data comes from two separate files (grade file and demographic file). Demographics are merged by school/district ID. <code>lep</code> and <code>special_ed</code> may be NA in the demographic file. SC also has an <code>EE</code> (Early Education) grade level in some years.</p>
+</div>
+<div class="section level3">
+<h3 id="grade_level">grade_level<a class="anchor" aria-label="anchor" href="#grade_level"></a></h3>
+<p><code>EE</code>, <code>PK</code>, <code>K</code>, <code>01</code>-<code>12</code>, <code>TOTAL</code></p>
+<p>Grade aggregates from <code><a href="reference/enr_grade_aggs.html">enr_grade_aggs()</a></code>: <code>K8</code>, <code>HS</code>, <code>K12</code></p>
+<p><strong>Common trap:</strong> SC includes <code>EE</code> (Early Education, mapped from <code>grade_ee</code>) in some years, which is separate from <code>PK</code>. The K12 aggregate excludes both <code>PK</code> and <code>EE</code>.</p>
+</div>
+<div class="section level3">
+<h3 id="entity-flags">entity flags<a class="anchor" aria-label="anchor" href="#entity-flags"></a></h3>
+<p><code>is_state</code>, <code>is_district</code>, <code>is_campus</code>, <code>is_charter</code></p>
+<p><strong>Note:</strong> SC uses <code>is_campus</code> (not <code>is_school</code>). <code>is_charter</code> is derived from <code>charter_flag</code> column (<code>Y</code>/<code>N</code>). County and region columns exist but may be NA.</p>
+<hr></div>
+</div>
+<div class="section level2">
 <h2 id="readme-images-from-vignettes-required">README Images from Vignettes (REQUIRED)<a class="anchor" aria-label="anchor" href="#readme-images-from-vignettes-required"></a></h2>
 <p><strong>NEVER use <code>man/figures/</code> or <code>generate_readme_figs.R</code> for README images.</strong></p>
 <p>README images MUST come from pkgdown-generated vignette output so they auto-update on merge:</p>
