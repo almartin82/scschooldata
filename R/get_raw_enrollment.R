@@ -450,45 +450,47 @@ download_report_cards_data <- function(end_year) {
     stop("SC Report Cards data available from 2018-2025")
   }
 
-  # Build URL - pattern varies slightly by year
-  # For end_year=2024, school year is "2023-24"
-  school_year_short <- sprintf("%02d", end_year %% 100)
-  school_year_full <- paste0((end_year - 1), "-", school_year_short)
-
-  if (end_year >= 2024) {
-    # 2024+: report-cards-data-for-researchers-2023-24
-    url <- paste0(
-      "https://screportcards.com/files/", end_year,
-      "/data-files/report-cards-data-for-researchers-", school_year_full, "/"
-    )
-  } else {
-    # Earlier years use "report-card" (singular)
-    url <- paste0(
-      "https://screportcards.com/files/", end_year,
-      "/data-files/report-card-data-for-researchers-", school_year_full, "/"
-    )
-  }
+  # Build candidate URLs - SC DOE has used multiple URL patterns over the years
+  urls <- build_report_cards_urls(end_year)
 
   # Create temp file
   tname <- tempfile(pattern = "sc_reportcards_", tmpdir = tempdir(), fileext = ".xlsx")
 
-  # Download
-  tryCatch({
-    response <- httr::GET(
-      url,
-      httr::write_disk(tname, overwrite = TRUE),
-      httr::timeout(180),
-      httr::user_agent("scschooldata R package")
-    )
+  # Try each URL pattern until one succeeds
+  success <- FALSE
+  last_error <- NULL
 
-    if (httr::http_error(response)) {
-      stop(paste("HTTP error:", httr::status_code(response)))
+  for (url in urls) {
+    result <- tryCatch({
+      response <- httr::GET(
+        url,
+        httr::write_disk(tname, overwrite = TRUE),
+        httr::timeout(180),
+        httr::user_agent("scschooldata R package")
+      )
+
+      if (!httr::http_error(response) && file.info(tname)$size > 1000) {
+        TRUE
+      } else {
+        FALSE
+      }
+    }, error = function(e) {
+      last_error <<- e$message
+      FALSE
+    })
+
+    if (isTRUE(result)) {
+      success <- TRUE
+      break
     }
+  }
 
-  }, error = function(e) {
+  if (!success) {
+    unlink(tname)
     stop(paste("Failed to download Report Cards data for year", end_year,
-               "\nError:", e$message))
-  })
+               "\nTried", length(urls), "URL patterns, all returned errors.",
+               "\nLast error:", if (!is.null(last_error)) last_error else "HTTP error"))
+  }
 
   # Read the MainPage sheet
   df <- readxl::read_excel(tname, sheet = "1.MainPage")
@@ -501,4 +503,46 @@ download_report_cards_data <- function(end_year) {
   names(df) <- gsub("_+", "_", names(df))
 
   df
+}
+
+
+#' Build candidate URLs for Report Cards data download
+#'
+#' SC DOE has changed URL patterns multiple times. This function generates
+#' all known patterns for a given year so the download function can try them.
+#'
+#' @param end_year School year end (e.g., 2024 for 2023-24)
+#' @return Vector of candidate URLs to try
+#' @keywords internal
+build_report_cards_urls <- function(end_year) {
+
+  school_year_short <- sprintf("%02d", end_year %% 100)
+  school_year_full_short <- paste0((end_year - 1), "-", school_year_short)
+  school_year_full_long <- paste0((end_year - 1), "-", end_year)
+
+  base <- paste0("https://screportcards.com/files/", end_year, "/data-files/")
+
+  # Generate all known URL patterns - SC DOE has used variations of:
+  # - "report-cards-data" vs "report-card-data" (plural vs singular)
+  # - Short year (2023-24) vs full year (2023-2024)
+  # - With and without trailing slash
+  urls <- c(
+    # Plural "report-cards" with short year (2023+ pattern)
+    paste0(base, "report-cards-data-for-researchers-", school_year_full_short, "/"),
+    paste0(base, "report-cards-data-for-researchers-", school_year_full_short),
+    # Plural "report-cards" with long year (2020-2022 pattern)
+    paste0(base, "report-cards-data-for-researchers-", school_year_full_long, "/"),
+    paste0(base, "report-cards-data-for-researchers-", school_year_full_long),
+    # Singular "report-card" with short year
+    paste0(base, "report-card-data-for-researchers-", school_year_full_short, "/"),
+    paste0(base, "report-card-data-for-researchers-", school_year_full_short),
+    # Singular "report-card" with long year
+    paste0(base, "report-card-data-for-researchers-", school_year_full_long, "/"),
+    paste0(base, "report-card-data-for-researchers-", school_year_full_long),
+    # Without year suffix
+    paste0(base, "report-cards-data-for-researchers/"),
+    paste0(base, "report-card-data-for-researchers/")
+  )
+
+  unique(urls)
 }
