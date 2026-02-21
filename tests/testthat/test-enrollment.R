@@ -196,7 +196,18 @@ test_that("fetch_report_cards downloads data", {
   skip_on_cran()
   skip_if_offline()
 
-  result <- fetch_report_cards(2024, use_cache = FALSE)
+  # screportcards.com is an external site that can be intermittently unavailable
+  # or change URL patterns. Skip gracefully if the site is down rather than
+  # failing CI on transient network issues.
+  result <- tryCatch(
+    fetch_report_cards(2024, use_cache = FALSE),
+    error = function(e) {
+      if (grepl("Failed to download Report Cards|HTTP error|SSL|timeout|connection", e$message, ignore.case = TRUE)) {
+        skip(paste("screportcards.com unavailable:", e$message))
+      }
+      stop(e)
+    }
+  )
 
   expect_true(is.data.frame(result))
   expect_true("school_id" %in% names(result))
