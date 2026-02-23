@@ -147,18 +147,23 @@ lowcountry
 
 ### 6. South Carolina's racial composition is shifting fast
 
-In just six years, the white share of enrollment has dropped from 51% to 47%, while Hispanic enrollment has surged from 10% to nearly 15%.
+In just six years, the white share of enrollment has dropped from 50% to 46%, while Hispanic enrollment has surged from 10% to over 14%.
 
 ```r
 demo_enr <- fetch_enr_multi(c(2019, 2022, 2025), use_cache = TRUE)
+
+# Get total enrollment per year for percentage calculation
+demo_totals <- demo_enr |>
+  filter(is_state, grade_level == "TOTAL", subgroup == "total_enrollment") |>
+  select(end_year, total = n_students)
 
 demo_shift <- demo_enr |>
   filter(is_state, grade_level == "TOTAL",
          subgroup %in% c("white", "black", "hispanic", "multiracial")) |>
   select(end_year, subgroup, n_students) |>
-  group_by(end_year) |>
-  mutate(pct = round(n_students / sum(n_students, na.rm = TRUE) * 100, 1)) |>
-  ungroup()
+  left_join(demo_totals, by = "end_year") |>
+  mutate(pct = round(n_students / total * 100, 1)) |>
+  select(-total)
 stopifnot(nrow(demo_shift) > 0)
 
 demo_shift |>
@@ -190,12 +195,22 @@ stopifnot(nrow(charter_trends) > 0)
 charter_trends
 
 # Charter as percent of state
-charter_pct <- enr_2025 |>
-  filter(is_state | grepl("Charter School District", district_name),
+state_total <- enr_2025 |>
+  filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") |>
+  pull(n_students)
+
+charter_district <- enr_2025 |>
+  filter(grepl("SC Public Charter School District", district_name),
+         is_district,
          subgroup == "total_enrollment", grade_level == "TOTAL") |>
-  select(district_name, n_students) |>
-  mutate(type = ifelse(is.na(district_name), "State Total", "Charter")) |>
-  select(type, n_students)
+  pull(n_students)
+
+charter_pct <- data.frame(
+  type = c("State Total", "SC Public Charter School District"),
+  n_students = c(state_total, charter_district),
+  pct = round(c(100, charter_district / state_total * 100), 1)
+)
+stopifnot(nrow(charter_pct) > 0)
 
 charter_pct
 ```
@@ -223,7 +238,7 @@ stopifnot(nrow(k_trends) > 0)
 k_trends
 ```
 
-![Kindergarten Enrollment: Pandemic Impact & Recovery](https://almartin82.github.io/scschooldata/articles/enrollment_hooks_files/figure-html/k-chart-1.png)
+![Kindergarten Enrollment: Still Below Pre-Pandemic Levels](https://almartin82.github.io/scschooldata/articles/enrollment_hooks_files/figure-html/k-chart-1.png)
 
 ---
 
