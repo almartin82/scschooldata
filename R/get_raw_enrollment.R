@@ -201,7 +201,21 @@ build_headcount_url <- function(end_year, school_year, level, data_type, count_d
     return(url)
   }
 
-  # Older formats (2013-2020) - more variation
+  # 2020 uses "head-counts" (with extra hyphen) in folder name
+  if (end_year == 2020) {
+    year_folder <- paste0(school_year, "-active-student-head-counts")
+
+    if (data_type == "grade") {
+      file_part <- paste0(count_day, "-day-", level, "-headcount-by-grade-", school_year)
+    } else {
+      file_part <- paste0(count_day, "-day-", level, "-headcount-by-gender-ethnicity-and-pupils-in-poverty-", school_year)
+    }
+
+    url <- paste0(base_url, "/", year_folder, "/", file_part, "/")
+    return(url)
+  }
+
+  # Older formats (2013-2019) - more variation
   year_folder <- paste0(school_year, "-active-student-headcounts")
   if (end_year == 2017) {
     year_folder <- gsub("headcounts", "headcount", year_folder)
@@ -235,7 +249,8 @@ build_alternate_urls <- function(end_year, school_year, level, data_type, count_
   # Try various URL patterns that have been used over the years
   year_folders <- c(
     paste0(school_year, "-active-student-headcounts"),
-    paste0(school_year, "-active-student-headcount")
+    paste0(school_year, "-active-student-headcount"),
+    paste0(school_year, "-active-student-head-counts")
   )
 
   # Build the year string without hyphen (e.g., "201314" from "2013-14")
@@ -252,6 +267,9 @@ build_alternate_urls <- function(end_year, school_year, level, data_type, count_
       paste0(count_day, "thday", level, "headcountbygrade", school_year),
       paste0(count_day, "thday", level, "headcountbygrade", school_year_compact),
       paste0(count_day, "thday", level, "-headcount-by-grade-", school_year),
+
+      # 2014-15 patterns (e.g., 45thdayschool-totals-by-grade-2014-15)
+      paste0(count_day, "thday", level, "-totals-by-grade-", school_year),
 
       # 2012-2014 patterns (e.g., 2012-13-45day-school-activeheadcountbygrade)
       paste0(school_year, "-", count_day, "day-", level, "-activeheadcountbygrade"),
@@ -284,11 +302,13 @@ build_alternate_urls <- function(end_year, school_year, level, data_type, count_
       paste0(school_year, "-", count_day, "day-", level, "-activeheadcountbygenderlunchstatusandrace"),
       paste0(school_year, "-", count_day, "day-", level, "-activeheadcountbygenderlunchstatusandrace-xls"),
 
+      # 2014-15 patterns (e.g., 45thdayschool-by-gender-race-2014-15)
+      paste0(count_day, "thday", level, "-by-gender-race-", school_year),
+      paste0(count_day, "thday", level, "-by-gender-race-lunch-", school_year),
+
       # Additional variations with different separators
       paste0(count_day, "-day-", level, "-headcount-by-gender-race"),
-      paste0(count_day, "thday", level, "-by-gender-race-", school_year),
       paste0(count_day, "th-day-", level, "-headcount-by-gender-lunch-status-and-race-", school_year),
-      paste0(count_day, "thday", level, "-by-gender-race-lunch-", school_year),
       paste0(level, "-headcount-by-gender-ethnicity-and-pupils-in-poverty"),
       paste0(level, "-headcount-by-gender-and-ethnicity-", school_year)
     )
