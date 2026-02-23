@@ -29,16 +29,16 @@ library(ggplot2)
 theme_set(theme_minimal(base_size = 14))
 ```
 
-This vignette explores South Carolina's public school enrollment data, surfacing key trends and demographic patterns across 13 years of data (2013-2025). Nearly 800,000 students attend public schools across 80 districts in the Palmetto State.
+This vignette explores South Carolina's public school enrollment data, surfacing key trends and demographic patterns across a decade of data (2015-2025). Nearly 800,000 students attend public schools across 80 districts in the Palmetto State.
 
 ---
 
 ## 1. South Carolina is growing
 
-Unlike many states facing enrollment decline, South Carolina has added approximately 50,000 students since 2013. The Palmetto State's population growth is reflected in its schools.
+Unlike many states facing enrollment decline, South Carolina has added approximately 50,000 students since 2015. The Palmetto State's population growth is reflected in its schools.
 
 ```{r statewide-trend}
-enr <- fetch_enr_multi(c(2013, 2015, 2017, 2019, 2021, 2023, 2025), use_cache = TRUE)
+enr <- fetch_enr_multi(c(2015, 2017, 2019, 2021, 2023, 2025), use_cache = TRUE)
 
 state_totals <- enr |>
   filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") |>
@@ -58,7 +58,7 @@ ggplot(state_totals, aes(x = end_year, y = n_students)) +
   geom_point(size = 3, color = "#73000A") +
   scale_y_continuous(labels = scales::comma) +
   labs(
-    title = "South Carolina Public School Enrollment (2013-2025)",
+    title = "South Carolina Public School Enrollment (2015-2025)",
     subtitle = "Steady growth with a pandemic dip in 2021",
     x = "School Year (ending)",
     y = "Total Enrollment"
@@ -221,10 +221,10 @@ lowcountry |>
 
 ## 6. South Carolina's racial composition is shifting fast
 
-In just 10 years, the white share of enrollment has dropped from over 53% to under 48%, while Hispanic enrollment has nearly doubled from 7% to 12%.
+In just 8 years, the white share of enrollment has dropped from over 51% to under 48%, while Hispanic enrollment has surged from 9% to nearly 15%.
 
 ```{r demo-shift}
-demo_enr <- fetch_enr_multi(c(2015, 2020, 2025), use_cache = TRUE)
+demo_enr <- fetch_enr_multi(c(2017, 2020, 2025), use_cache = TRUE)
 
 demo_shift <- demo_enr |>
   filter(is_state, grade_level == "TOTAL",
@@ -251,7 +251,7 @@ demo_shift |>
                     labels = c("White", "Black", "Hispanic", "Multiracial")) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
   labs(
-    title = "South Carolina's Shifting Demographics (2015-2025)",
+    title = "South Carolina's Shifting Demographics (2017-2025)",
     subtitle = "White share declining, Hispanic and multiracial shares rising",
     x = "School Year",
     y = "Percent of Enrollment"
@@ -610,14 +610,14 @@ smallest |>
 
 ## 15. Charleston's Decade of Transformation
 
-Charleston County School District has undergone significant demographic change over the past decade, reflecting the city's rapid growth and gentrification.
+Charleston 01 (Charleston County) has undergone significant demographic change in recent years, reflecting the city's rapid growth and gentrification.
 
 ```{r charleston-demographics}
-charleston_demo <- fetch_enr_multi(c(2015, 2020, 2025), use_cache = TRUE)
+charleston_demo <- fetch_enr_multi(c(2017, 2020, 2025), use_cache = TRUE)
 
 charleston_demo_trends <- charleston_demo |>
   filter(
-    grepl("Charleston County", district_name),
+    grepl("Charleston", district_name),
     is_district,
     grade_level == "TOTAL",
     subgroup %in% c("white", "black", "hispanic", "asian", "multiracial")
@@ -643,7 +643,7 @@ charleston_demo_trends |>
                     labels = c("White", "Black", "Hispanic", "Asian", "Multiracial")) +
   labs(
     title = "Charleston County: A Changing District",
-    subtitle = "Demographic composition 2015-2025",
+    subtitle = "Demographic composition 2017-2025",
     x = "School Year",
     y = "Percentage of Enrollment"
   )
