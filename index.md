@@ -4,8 +4,8 @@
 [GitHub](https://github.com/almartin82/scschooldata)
 
 Fetch and analyze South Carolina school enrollment data from the South
-Carolina Department of Education (SCDE) in R or Python. **Over a decade
-of data** (2015-2025) for every school, district, and the state.
+Carolina Department of Education (SCDE) in R or Python. **11 years of
+data** (2015-2025) for every school, district, and the state.
 
 Part of the [state schooldata
 project](https://github.com/almartin82?tab=repositories&q=schooldata),
@@ -15,7 +15,7 @@ data accessible.
 
 ## What can you find with scschooldata?
 
-South Carolina enrolls **nearly 800,000 students** across 80 school
+South Carolina enrolls **nearly 797,000 students** across 81 school
 districts. There are stories hiding in these numbers. Here are fifteen
 insights waiting to be explored:
 
@@ -24,7 +24,7 @@ insights waiting to be explored:
 ### 1. South Carolina is growing
 
 Unlike many states facing enrollment decline, South Carolina has added
-approximately 50,000 students since 2015. The Palmetto State’s
+approximately 40,000 students since 2015. The Palmetto State’s
 population growth is reflected in its schools.
 
 ``` r
@@ -58,7 +58,7 @@ South Carolina Public School Enrollment (2015-2025)
 
 ### 2. Greenville County is the giant
 
-Greenville County Schools enrolls nearly 77,000 students, making it the
+Greenville County Schools enrolls nearly 78,000 students, making it the
 largest district in the state and one of the largest in the Southeast.
 
 ``` r
@@ -83,8 +83,9 @@ Top 10 South Carolina Districts by Enrollment (2025)
 
 ### 3. Hispanic enrollment is surging
 
-Hispanic student enrollment has more than doubled over the past decade,
-growing from about 7% to over 12% of total enrollment.
+Hispanic students now make up nearly 15% of South Carolina’s enrollment,
+up from 10% just six years ago – a pace that is reshaping classrooms
+across the state.
 
 ``` r
 demographics <- enr_2025 |>
@@ -138,8 +139,8 @@ I-85 Corridor Districts (2025)
 ### 5. The Lowcountry is expanding
 
 Charleston, Berkeley, and Dorchester counties form South Carolina’s
-tri-county Lowcountry region, and all three have seen substantial
-enrollment growth.
+tri-county Lowcountry region. Berkeley County has led the charge with
+21% growth since 2015.
 
 ``` r
 lowcountry_enr <- fetch_enr_multi(c(2015, 2020, 2025), use_cache = TRUE)
@@ -172,20 +173,24 @@ Lowcountry Enrollment Growth (2015-2025)
 
 ### 6. South Carolina’s racial composition is shifting fast
 
-In just 8 years, the white share of enrollment has dropped from over 51%
-to under 48%, while Hispanic enrollment has surged from 9% to nearly
-15%.
+In just six years, the white share of enrollment has dropped from 50% to
+46%, while Hispanic enrollment has surged from 10% to over 14%.
 
 ``` r
-demo_enr <- fetch_enr_multi(c(2017, 2020, 2025), use_cache = TRUE)
+demo_enr <- fetch_enr_multi(c(2019, 2022, 2025), use_cache = TRUE)
+
+# Get total enrollment per year for percentage calculation
+demo_totals <- demo_enr |>
+  filter(is_state, grade_level == "TOTAL", subgroup == "total_enrollment") |>
+  select(end_year, total = n_students)
 
 demo_shift <- demo_enr |>
   filter(is_state, grade_level == "TOTAL",
          subgroup %in% c("white", "black", "hispanic", "multiracial")) |>
   select(end_year, subgroup, n_students) |>
-  group_by(end_year) |>
-  mutate(pct = round(n_students / sum(n_students, na.rm = TRUE) * 100, 1)) |>
-  ungroup()
+  left_join(demo_totals, by = "end_year") |>
+  mutate(pct = round(n_students / total * 100, 1)) |>
+  select(-total)
 stopifnot(nrow(demo_shift) > 0)
 
 demo_shift |>
@@ -194,9 +199,9 @@ demo_shift |>
 ```
 
 ![South Carolina’s Shifting Demographics
-(2017-2025)](https://almartin82.github.io/scschooldata/articles/enrollment_hooks_files/figure-html/demo-shift-chart-1.png)
+(2019-2025)](https://almartin82.github.io/scschooldata/articles/enrollment_hooks_files/figure-html/demo-shift-chart-1.png)
 
-South Carolina’s Shifting Demographics (2017-2025)
+South Carolina’s Shifting Demographics (2019-2025)
 
 ------------------------------------------------------------------------
 
@@ -221,12 +226,22 @@ stopifnot(nrow(charter_trends) > 0)
 charter_trends
 
 # Charter as percent of state
-charter_pct <- enr_2025 |>
-  filter(is_state | grepl("Charter School District", district_name),
+state_total <- enr_2025 |>
+  filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") |>
+  pull(n_students)
+
+charter_district <- enr_2025 |>
+  filter(grepl("SC Public Charter School District", district_name),
+         is_district,
          subgroup == "total_enrollment", grade_level == "TOTAL") |>
-  select(district_name, n_students) |>
-  mutate(type = ifelse(is.na(district_name), "State Total", "Charter")) |>
-  select(type, n_students)
+  pull(n_students)
+
+charter_pct <- data.frame(
+  type = c("State Total", "SC Public Charter School District"),
+  n_students = c(state_total, charter_district),
+  pct = round(c(100, charter_district / state_total * 100), 1)
+)
+stopifnot(nrow(charter_pct) > 0)
 
 charter_pct
 ```
@@ -238,10 +253,11 @@ Charter District Growth (2015-2025)
 
 ------------------------------------------------------------------------
 
-### 8. Kindergarten is recovering from COVID
+### 8. Kindergarten still has not recovered from COVID
 
-Kindergarten enrollment dropped sharply during the pandemic but is now
-recovering toward pre-pandemic levels.
+Kindergarten enrollment dropped sharply during the pandemic and remains
+stubbornly below 2019 levels, even as overall state enrollment has
+grown.
 
 ``` r
 k_enr <- fetch_enr_multi(2019:2025, use_cache = TRUE)
@@ -258,10 +274,10 @@ stopifnot(nrow(k_trends) > 0)
 k_trends
 ```
 
-![Kindergarten Enrollment: Pandemic Impact &
-Recovery](https://almartin82.github.io/scschooldata/articles/enrollment_hooks_files/figure-html/k-chart-1.png)
+![Kindergarten Enrollment: Still Below Pre-Pandemic
+Levels](https://almartin82.github.io/scschooldata/articles/enrollment_hooks_files/figure-html/k-chart-1.png)
 
-Kindergarten Enrollment: Pandemic Impact & Recovery
+Kindergarten Enrollment: Still Below Pre-Pandemic Levels
 
 ------------------------------------------------------------------------
 
@@ -303,7 +319,7 @@ Pee Dee Districts: A Decade of Decline
 
 ### 10. District size varies dramatically
 
-South Carolina’s 80 districts range from tiny rural systems to massive
+South Carolina’s 81 districts range from tiny rural systems to massive
 county-wide operations serving tens of thousands.
 
 ``` r
@@ -466,14 +482,15 @@ South Carolina’s Smallest Districts
 
 ------------------------------------------------------------------------
 
-### 15. Charleston’s Decade of Transformation
+### 15. Charleston’s Black enrollment has dropped 25% in six years
 
-Charleston 01 (Charleston County) has undergone significant demographic
-change in recent years, reflecting the city’s rapid growth and
-gentrification.
+Charleston 01 (Charleston County) lost nearly 4,500 Black students
+between 2019 and 2025 – a 24% decline – even as Hispanic enrollment
+surged 74%. The district’s rapid growth and gentrification are remaking
+its student body.
 
 ``` r
-charleston_demo <- fetch_enr_multi(c(2017, 2020, 2025), use_cache = TRUE)
+charleston_demo <- fetch_enr_multi(c(2019, 2022, 2025), use_cache = TRUE)
 
 charleston_demo_trends <- charleston_demo |>
   filter(
@@ -567,7 +584,8 @@ Headcounts](https://ed.sc.gov/data/other/student-counts/active-student-headcount
 
 ### Available Years
 
-- **2013-2025** (13 years of data)
+- **2015-2025** (11 years of data; earlier years have unreliable
+  downloads)
 - Data reflects the 45-day count (early fall enrollment snapshot)
 
 ### Suppression Rules
@@ -582,6 +600,13 @@ Headcounts data. All counts are reported as-is from the state.
 - Charter schools are identified by `is_charter = TRUE`
 - State-authorized charters are grouped under District 900 (SC Public
   Charter School District)
+- **Known issue:** The `econ_disadv` subgroup currently returns very low
+  counts (~251 statewide instead of the expected ~460,000). The Pupils
+  in Poverty field in the SCDE source files appears to be sparsely
+  populated. Use with caution.
+- **Known issue:** Demographic data for 2015 and 2017 is unreliable
+  (zero counts or corrupted values). Use 2019+ for demographic
+  breakdowns.
 
 ### Census Day
 
@@ -593,9 +618,9 @@ year.
 
 | Years     | Source                    | Notes                           |
 |-----------|---------------------------|---------------------------------|
-| 2013-2025 | Active Student Headcounts | Full demographics, grades PK-12 |
+| 2015-2025 | Active Student Headcounts | Full demographics, grades PK-12 |
 
-**13 years** across ~80 districts and ~1,400 schools.
+**11 years** across ~81 districts and ~1,400 schools.
 
 ### What’s Included
 
@@ -604,7 +629,7 @@ year.
   Pacific Islander, Multiracial
 - **Gender:** Male, Female
 - **Special populations:** Economically disadvantaged (Pupils in
-  Poverty)
+  Poverty) – currently underreported, see Data Quality Notes
 - **Grade levels:** Pre-K through Grade 12
 
 ### What’s NOT Available
