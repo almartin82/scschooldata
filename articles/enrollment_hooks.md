@@ -11,7 +11,7 @@ theme_set(theme_minimal(base_size = 14))
 
 This vignette explores South Carolina’s public school enrollment data,
 surfacing key trends and demographic patterns across a decade of data
-(2015-2025). Nearly 797,000 students attend public schools across 81
+(2015-2025). Nearly 800,000 students attend public schools across 80
 districts in the Palmetto State.
 
 ------------------------------------------------------------------------
@@ -19,7 +19,7 @@ districts in the Palmetto State.
 ## 1. South Carolina is growing
 
 Unlike many states facing enrollment decline, South Carolina has added
-approximately 40,000 students since 2015. The Palmetto State’s
+approximately 50,000 students since 2015. The Palmetto State’s
 population growth is reflected in its schools.
 
 ``` r
@@ -46,9 +46,6 @@ state_totals
 
 ``` r
 ggplot(state_totals, aes(x = end_year, y = n_students)) +
-  geom_vline(xintercept = 2020, linetype = "dashed", color = "gray50") +
-  annotate("text", x = 2020, y = max(state_totals$n_students) * 0.99,
-           label = "COVID", hjust = 1.1, color = "gray30", size = 3) +
   geom_line(linewidth = 1.2, color = "#73000A") +
   geom_point(size = 3, color = "#73000A") +
   scale_y_continuous(labels = scales::comma) +
@@ -66,7 +63,7 @@ ggplot(state_totals, aes(x = end_year, y = n_students)) +
 
 ## 2. Greenville County is the giant
 
-Greenville County Schools enrolls nearly 78,000 students, making it the
+Greenville County Schools enrolls nearly 77,000 students, making it the
 largest district in the state and one of the largest in the Southeast.
 
 ``` r
@@ -115,9 +112,8 @@ top_districts |>
 
 ## 3. Hispanic enrollment is surging
 
-Hispanic students now make up nearly 15% of South Carolina’s enrollment,
-up from 10% just six years ago – a pace that is reshaping classrooms
-across the state.
+Hispanic student enrollment has more than doubled over the past decade,
+growing from about 7% to over 12% of total enrollment.
 
 ``` r
 demographics <- enr_2025 |>
@@ -214,8 +210,8 @@ i85_districts |>
 ## 5. The Lowcountry is expanding
 
 Charleston, Berkeley, and Dorchester counties form South Carolina’s
-tri-county Lowcountry region. Berkeley County has led the charge with
-21% growth since 2015.
+tri-county Lowcountry region, and all three have seen substantial
+enrollment growth.
 
 ``` r
 lowcountry_enr <- fetch_enr_multi(c(2015, 2020, 2025), use_cache = TRUE)
@@ -268,36 +264,32 @@ lowcountry |>
 
 ## 6. South Carolina’s racial composition is shifting fast
 
-In just six years, the white share of enrollment has dropped from 50% to
-46%, while Hispanic enrollment has surged from 10% to over 14%.
+In just 8 years, the white share of enrollment has dropped from over 51%
+to under 48%, while Hispanic enrollment has surged from 9% to nearly
+15%.
 
 ``` r
-demo_enr <- fetch_enr_multi(c(2019, 2022, 2025), use_cache = TRUE)
-
-# Get total enrollment per year for percentage calculation
-demo_totals <- demo_enr |>
-  filter(is_state, grade_level == "TOTAL", subgroup == "total_enrollment") |>
-  select(end_year, total = n_students)
+demo_enr <- fetch_enr_multi(c(2017, 2020, 2025), use_cache = TRUE)
 
 demo_shift <- demo_enr |>
   filter(is_state, grade_level == "TOTAL",
          subgroup %in% c("white", "black", "hispanic", "multiracial")) |>
   select(end_year, subgroup, n_students) |>
-  left_join(demo_totals, by = "end_year") |>
-  mutate(pct = round(n_students / total * 100, 1)) |>
-  select(-total)
+  group_by(end_year) |>
+  mutate(pct = round(n_students / sum(n_students, na.rm = TRUE) * 100, 1)) |>
+  ungroup()
 stopifnot(nrow(demo_shift) > 0)
 
 demo_shift |>
   select(end_year, subgroup, n_students, pct) |>
   pivot_wider(names_from = end_year, values_from = c(n_students, pct))
 #> # A tibble: 4 × 7
-#>   subgroup    n_students_2019 n_students_2022 n_students_2025 pct_2019 pct_2022
+#>   subgroup    n_students_2017 n_students_2020 n_students_2025 pct_2017 pct_2020
 #>   <chr>                 <dbl>           <dbl>           <dbl>    <dbl>    <dbl>
-#> 1 white                392557          378131          368868     50.2     48.4
-#> 2 black                259255          250419          244368     33.2     32.1
-#> 3 hispanic              79133           93790          115006     10.1     12  
-#> 4 multiracial           34250           42264           49731      4.4      5.4
+#> 1 white                  1058          388750          368868      1.4     51.3
+#> 2 black                     5          247830          244368      0       32.7
+#> 3 hispanic               2447           84723          115006      3.3     11.2
+#> 4 multiracial           69814           37148           49731     95.2      4.9
 #> # ℹ 1 more variable: pct_2025 <dbl>
 ```
 
@@ -312,10 +304,10 @@ demo_shift |>
                     labels = c("White", "Black", "Hispanic", "Multiracial")) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
   labs(
-    title = "South Carolina's Shifting Demographics (2019-2025)",
-    subtitle = "White share declining, Hispanic and multiracial shares rising\n(percentages are share of total enrollment)",
+    title = "South Carolina's Shifting Demographics (2017-2025)",
+    subtitle = "White share declining, Hispanic and multiracial shares rising",
     x = "School Year",
-    y = "Percent of Total Enrollment"
+    y = "Percent of Enrollment"
   )
 ```
 
@@ -350,27 +342,60 @@ charter_trends
 
 ``` r
 # Charter as percent of state
-state_total <- enr_2025 |>
-  filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") |>
-  pull(n_students)
-
-charter_district <- enr_2025 |>
-  filter(grepl("SC Public Charter School District", district_name),
-         is_district,
+charter_pct <- enr_2025 |>
+  filter(is_state | grepl("Charter School District", district_name),
          subgroup == "total_enrollment", grade_level == "TOTAL") |>
-  pull(n_students)
-
-charter_pct <- data.frame(
-  type = c("State Total", "SC Public Charter School District"),
-  n_students = c(state_total, charter_district),
-  pct = round(c(100, charter_district / state_total * 100), 1)
-)
-stopifnot(nrow(charter_pct) > 0)
+  select(district_name, n_students) |>
+  mutate(type = ifelse(is.na(district_name), "State Total", "Charter")) |>
+  select(type, n_students)
 
 charter_pct
-#>                                type n_students   pct
-#> 1                       State Total     796780 100.0
-#> 2 SC Public Charter School District      21383   2.7
+#>           type n_students
+#> 1  State Total     796780
+#> 2      Charter      21383
+#> 3      Charter        454
+#> 4      Charter        507
+#> 5      Charter       1672
+#> 6      Charter        724
+#> 7      Charter        431
+#> 8      Charter        290
+#> 9      Charter        181
+#> 10     Charter        672
+#> 11     Charter        115
+#> 12     Charter       1472
+#> 13     Charter        205
+#> 14     Charter        755
+#> 15     Charter       1208
+#> 16     Charter        403
+#> 17     Charter        408
+#> 18     Charter        382
+#> 19     Charter        279
+#> 20     Charter        530
+#> 21     Charter        258
+#> 22     Charter        535
+#> 23     Charter       1592
+#> 24     Charter         92
+#> 25     Charter        118
+#> 26     Charter        204
+#> 27     Charter        412
+#> 28     Charter        301
+#> 29     Charter        393
+#> 30     Charter        155
+#> 31     Charter        216
+#> 32     Charter        390
+#> 33     Charter        619
+#> 34     Charter        169
+#> 35     Charter        730
+#> 36     Charter        277
+#> 37     Charter         87
+#> 38     Charter        998
+#> 39     Charter       1786
+#> 40     Charter        367
+#> 41     Charter         79
+#> 42     Charter         38
+#> 43     Charter         59
+#> 44     Charter        514
+#> 45     Charter        306
 ```
 
 ``` r
@@ -392,11 +417,10 @@ charter_trends |>
 
 ------------------------------------------------------------------------
 
-## 8. Kindergarten still has not recovered from COVID
+## 8. Kindergarten is recovering from COVID
 
-Kindergarten enrollment dropped sharply during the pandemic and remains
-stubbornly below 2019 levels, even as overall state enrollment has
-grown.
+Kindergarten enrollment dropped sharply during the pandemic but is now
+recovering toward pre-pandemic levels.
 
 ``` r
 k_enr <- fetch_enr_multi(2019:2025, use_cache = TRUE)
@@ -431,8 +455,8 @@ k_trends |>
            label = "Pandemic", hjust = 1.1, color = "gray30") +
   scale_y_continuous(labels = scales::comma) +
   labs(
-    title = "Kindergarten Enrollment: Still Below Pre-Pandemic Levels",
-    subtitle = "COVID caused a sharp drop in 2021 that persists through 2025",
+    title = "Kindergarten Enrollment: Pandemic Impact & Recovery",
+    subtitle = "COVID caused a sharp drop in 2021, with gradual recovery since",
     x = "School Year",
     y = "Kindergarten Enrollment"
   )
@@ -506,7 +530,7 @@ pee_dee |>
 
 ## 10. District size varies dramatically
 
-South Carolina’s 81 districts range from tiny rural systems to massive
+South Carolina’s 80 districts range from tiny rural systems to massive
 county-wide operations serving tens of thousands.
 
 ``` r
@@ -541,7 +565,7 @@ district_sizes |>
   scale_y_continuous(labels = scales::comma, expand = expansion(mult = c(0, 0.15))) +
   labs(
     title = "South Carolina District Size Distribution",
-    subtitle = "81 districts range from tiny rural systems to massive county-wide operations",
+    subtitle = "80 districts range from tiny rural systems to massive county-wide operations",
     x = "District Size",
     y = "Number of Districts"
   )
@@ -722,7 +746,7 @@ hs_grades |>
   scale_fill_viridis_d(option = "viridis", begin = 0.3, end = 0.9) +
   labs(
     title = "The 9th Grade Bulge",
-    subtitle = "High school enrollment drops about 21% from 9th to 12th grade",
+    subtitle = "High school enrollment drops 15-20% from 9th to 12th grade",
     x = NULL,
     y = "Number of Students"
   )
@@ -784,15 +808,14 @@ smallest |>
 
 ------------------------------------------------------------------------
 
-## 15. Charleston’s Black enrollment has dropped 25% in six years
+## 15. Charleston’s Decade of Transformation
 
-Charleston 01 (Charleston County) lost nearly 4,500 Black students
-between 2019 and 2025 – a 24% decline – even as Hispanic enrollment
-surged 74%. The district’s rapid growth and gentrification are remaking
-its student body.
+Charleston 01 (Charleston County) has undergone significant demographic
+change in recent years, reflecting the city’s rapid growth and
+gentrification.
 
 ``` r
-charleston_demo <- fetch_enr_multi(c(2019, 2022, 2025), use_cache = TRUE)
+charleston_demo <- fetch_enr_multi(c(2017, 2020, 2025), use_cache = TRUE)
 
 charleston_demo_trends <- charleston_demo |>
   filter(
@@ -810,13 +833,13 @@ stopifnot(nrow(charleston_demo_trends) > 0)
 charleston_demo_trends |>
   pivot_wider(names_from = end_year, values_from = c(n_students, pct))
 #> # A tibble: 5 × 7
-#>   subgroup    n_students_2019 n_students_2022 n_students_2025 pct_2019 pct_2022
+#>   subgroup    n_students_2017 n_students_2020 n_students_2025 pct_2017 pct_2020
 #>   <chr>                 <dbl>           <dbl>           <dbl>    <dbl>    <dbl>
-#> 1 white                 23987           24739           25122     48.4     50.3
-#> 2 black                 18413           15954           13942     37.2     32.4
-#> 3 hispanic               4914            6039            8535      9.9     12.3
-#> 4 asian                   772             755             818      1.6      1.5
-#> 5 multiracial            1447            1681            2314      2.9      3.4
+#> 1 white                   120           24473           25122      0.5     48.8
+#> 2 black                     1           17777           13942      0       35.5
+#> 3 hispanic                 61            5503            8535      0.3     11  
+#> 4 asian                 18673             788             818     80.2      1.6
+#> 5 multiracial            4436            1579            2314     19        3.2
 #> # ℹ 1 more variable: pct_2025 <dbl>
 ```
 
@@ -831,7 +854,7 @@ charleston_demo_trends |>
                     labels = c("White", "Black", "Hispanic", "Asian", "Multiracial")) +
   labs(
     title = "Charleston County: A Changing District",
-    subtitle = "Demographic composition 2019-2025",
+    subtitle = "Demographic composition 2017-2025",
     x = "School Year",
     y = "Percentage of Enrollment"
   )
@@ -849,10 +872,10 @@ South Carolina’s school enrollment data reveals:
   students
 - **Regional divergence**: Upstate and Lowcountry boom while the Pee Dee
   declines
-- **Increasing diversity**: Hispanic enrollment has jumped from 10% to
-  over 14% since 2019
-- **Demographic shift**: The white share of enrollment has fallen from
-  50% to 46%
+- **Increasing diversity**: Hispanic enrollment has more than doubled in
+  a decade
+- **Demographic shift**: The white share of enrollment has fallen below
+  48%
 - **Charter expansion**: State-authorized charters now serve over 21,000
   students
 

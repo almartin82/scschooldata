@@ -73,14 +73,14 @@
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/get_theme.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>This vignette explores South Carolina’s public school enrollment
 data, surfacing key trends and demographic patterns across a decade of
-data (2015-2025). Nearly 797,000 students attend public schools across
-81 districts in the Palmetto State.</p>
+data (2015-2025). Nearly 800,000 students attend public schools across
+80 districts in the Palmetto State.</p>
 <hr>
 <div class="section level2">
 <h2 id="south-carolina-is-growing">1. South Carolina is growing<a class="anchor" aria-label="anchor" href="#south-carolina-is-growing"></a>
 </h2>
 <p>Unlike many states facing enrollment decline, South Carolina has
-added approximately 40,000 students since 2015. The Palmetto State’s
+added approximately 50,000 students since 2015. The Palmetto State’s
 population growth is reflected in its schools.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">enr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2015</span>, <span class="fl">2017</span>, <span class="fl">2019</span>, <span class="fl">2021</span>, <span class="fl">2023</span>, <span class="fl">2025</span><span class="op">)</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -104,9 +104,6 @@ population growth is reflected in its schools.</p>
 <span><span class="co">#&gt; 6     2025     796780   7549       0.96</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">state_totals</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">end_year</span>, y <span class="op">=</span> <span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">2020</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"gray50"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span><span class="st">"text"</span>, x <span class="op">=</span> <span class="fl">2020</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">state_totals</span><span class="op">$</span><span class="va">n_students</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.99</span>,</span>
-<span>           label <span class="op">=</span> <span class="st">"COVID"</span>, hjust <span class="op">=</span> <span class="fl">1.1</span>, color <span class="op">=</span> <span class="st">"gray30"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.2</span>, color <span class="op">=</span> <span class="st">"#73000A"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span>, color <span class="op">=</span> <span class="st">"#73000A"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">comma</a></span><span class="op">)</span> <span class="op">+</span></span>
@@ -122,7 +119,7 @@ population growth is reflected in its schools.</p>
 <div class="section level2">
 <h2 id="greenville-county-is-the-giant">2. Greenville County is the giant<a class="anchor" aria-label="anchor" href="#greenville-county-is-the-giant"></a>
 </h2>
-<p>Greenville County Schools enrolls nearly 78,000 students, making it
+<p>Greenville County Schools enrolls nearly 77,000 students, making it
 the largest district in the state and one of the largest in the
 Southeast.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -167,9 +164,8 @@ Southeast.</p>
 <div class="section level2">
 <h2 id="hispanic-enrollment-is-surging">3. Hispanic enrollment is surging<a class="anchor" aria-label="anchor" href="#hispanic-enrollment-is-surging"></a>
 </h2>
-<p>Hispanic students now make up nearly 15% of South Carolina’s
-enrollment, up from 10% just six years ago – a pace that is reshaping
-classrooms across the state.</p>
+<p>Hispanic student enrollment has more than doubled over the past
+decade, growing from about 7% to over 12% of total enrollment.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">demographics</span> <span class="op">&lt;-</span> <span class="va">enr_2025</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>,</span>
@@ -256,8 +252,8 @@ development and migration from other states.</p>
 <h2 id="the-lowcountry-is-expanding">5. The Lowcountry is expanding<a class="anchor" aria-label="anchor" href="#the-lowcountry-is-expanding"></a>
 </h2>
 <p>Charleston, Berkeley, and Dorchester counties form South Carolina’s
-tri-county Lowcountry region. Berkeley County has led the charge with
-21% growth since 2015.</p>
+tri-county Lowcountry region, and all three have seen substantial
+enrollment growth.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lowcountry_enr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2015</span>, <span class="fl">2020</span>, <span class="fl">2025</span><span class="op">)</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
@@ -305,35 +301,31 @@ tri-county Lowcountry region. Berkeley County has led the charge with
 <div class="section level2">
 <h2 id="south-carolinas-racial-composition-is-shifting-fast">6. South Carolina’s racial composition is shifting fast<a class="anchor" aria-label="anchor" href="#south-carolinas-racial-composition-is-shifting-fast"></a>
 </h2>
-<p>In just six years, the white share of enrollment has dropped from 50%
-to 46%, while Hispanic enrollment has surged from 10% to over 14%.</p>
+<p>In just 8 years, the white share of enrollment has dropped from over
+51% to under 48%, while Hispanic enrollment has surged from 9% to nearly
+15%.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">demo_enr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2019</span>, <span class="fl">2022</span>, <span class="fl">2025</span><span class="op">)</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Get total enrollment per year for percentage calculation</span></span>
-<span><span class="va">demo_totals</span> <span class="op">&lt;-</span> <span class="va">demo_enr</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, total <span class="op">=</span> <span class="va">n_students</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">demo_enr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2017</span>, <span class="fl">2020</span>, <span class="fl">2025</span><span class="op">)</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">demo_shift</span> <span class="op">&lt;-</span> <span class="va">demo_enr</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>,</span>
 <span>         <span class="va">subgroup</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"black"</span>, <span class="st">"hispanic"</span>, <span class="st">"multiracial"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">subgroup</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">demo_totals</span>, by <span class="op">=</span> <span class="st">"end_year"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">n_students</span> <span class="op">/</span> <span class="va">total</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">total</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">end_year</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">n_students</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_students</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">demo_shift</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">demo_shift</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">subgroup</span>, <span class="va">n_students</span>, <span class="va">pct</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">end_year</span>, values_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_students</span>, <span class="va">pct</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 7</span></span></span>
-<span><span class="co">#&gt;   subgroup    n_students_2019 n_students_2022 n_students_2025 pct_2019 pct_2022</span></span>
+<span><span class="co">#&gt;   subgroup    n_students_2017 n_students_2020 n_students_2025 pct_2017 pct_2020</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> white                <span style="text-decoration: underline;">392</span>557          <span style="text-decoration: underline;">378</span>131          <span style="text-decoration: underline;">368</span>868     50.2     48.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> black                <span style="text-decoration: underline;">259</span>255          <span style="text-decoration: underline;">250</span>419          <span style="text-decoration: underline;">244</span>368     33.2     32.1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hispanic              <span style="text-decoration: underline;">79</span>133           <span style="text-decoration: underline;">93</span>790          <span style="text-decoration: underline;">115</span>006     10.1     12  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> multiracial           <span style="text-decoration: underline;">34</span>250           <span style="text-decoration: underline;">42</span>264           <span style="text-decoration: underline;">49</span>731      4.4      5.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> white                  <span style="text-decoration: underline;">1</span>058          <span style="text-decoration: underline;">388</span>750          <span style="text-decoration: underline;">368</span>868      1.4     51.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> black                     5          <span style="text-decoration: underline;">247</span>830          <span style="text-decoration: underline;">244</span>368      0       32.7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hispanic               <span style="text-decoration: underline;">2</span>447           <span style="text-decoration: underline;">84</span>723          <span style="text-decoration: underline;">115</span>006      3.3     11.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> multiracial           <span style="text-decoration: underline;">69</span>814           <span style="text-decoration: underline;">37</span>148           <span style="text-decoration: underline;">49</span>731     95.2      4.9</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: pct_2025 &lt;dbl&gt;</span></span></span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">demo_shift</span> <span class="op">|&gt;</span></span>
@@ -346,10 +338,10 @@ to 46%, while Hispanic enrollment has surged from 10% to over 14%.</p>
 <span>                    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"White"</span>, <span class="st">"Black"</span>, <span class="st">"Hispanic"</span>, <span class="st">"Multiracial"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.15</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>    title <span class="op">=</span> <span class="st">"South Carolina's Shifting Demographics (2019-2025)"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"White share declining, Hispanic and multiracial shares rising\n(percentages are share of total enrollment)"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"South Carolina's Shifting Demographics (2017-2025)"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"White share declining, Hispanic and multiracial shares rising"</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"School Year"</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Percent of Total Enrollment"</span></span>
+<span>    y <span class="op">=</span> <span class="st">"Percent of Enrollment"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="enrollment_hooks_files/figure-html/demo-shift-chart-1.png" class="r-plt" alt="" width="768"></p>
 <hr>
@@ -380,27 +372,60 @@ students.</p>
 <span><span class="co">#&gt; 3     2025      21383</span></span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Charter as percent of state</span></span>
-<span><span class="va">state_total</span> <span class="op">&lt;-</span> <span class="va">enr_2025</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">charter_district</span> <span class="op">&lt;-</span> <span class="va">enr_2025</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"SC Public Charter School District"</span>, <span class="va">district_name</span><span class="op">)</span>,</span>
-<span>         <span class="va">is_district</span>,</span>
+<span><span class="va">charter_pct</span> <span class="op">&lt;-</span> <span class="va">enr_2025</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Charter School District"</span>, <span class="va">district_name</span><span class="op">)</span>,</span>
 <span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">charter_pct</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"State Total"</span>, <span class="st">"SC Public Charter School District"</span><span class="op">)</span>,</span>
-<span>  n_students <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">state_total</span>, <span class="va">charter_district</span><span class="op">)</span>,</span>
-<span>  pct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="va">charter_district</span> <span class="op">/</span> <span class="va">state_total</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">charter_pct</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">district_name</span><span class="op">)</span>, <span class="st">"State Total"</span>, <span class="st">"Charter"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">type</span>, <span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">charter_pct</span></span>
-<span><span class="co">#&gt;                                type n_students   pct</span></span>
-<span><span class="co">#&gt; 1                       State Total     796780 100.0</span></span>
-<span><span class="co">#&gt; 2 SC Public Charter School District      21383   2.7</span></span></code></pre></div>
+<span><span class="co">#&gt;           type n_students</span></span>
+<span><span class="co">#&gt; 1  State Total     796780</span></span>
+<span><span class="co">#&gt; 2      Charter      21383</span></span>
+<span><span class="co">#&gt; 3      Charter        454</span></span>
+<span><span class="co">#&gt; 4      Charter        507</span></span>
+<span><span class="co">#&gt; 5      Charter       1672</span></span>
+<span><span class="co">#&gt; 6      Charter        724</span></span>
+<span><span class="co">#&gt; 7      Charter        431</span></span>
+<span><span class="co">#&gt; 8      Charter        290</span></span>
+<span><span class="co">#&gt; 9      Charter        181</span></span>
+<span><span class="co">#&gt; 10     Charter        672</span></span>
+<span><span class="co">#&gt; 11     Charter        115</span></span>
+<span><span class="co">#&gt; 12     Charter       1472</span></span>
+<span><span class="co">#&gt; 13     Charter        205</span></span>
+<span><span class="co">#&gt; 14     Charter        755</span></span>
+<span><span class="co">#&gt; 15     Charter       1208</span></span>
+<span><span class="co">#&gt; 16     Charter        403</span></span>
+<span><span class="co">#&gt; 17     Charter        408</span></span>
+<span><span class="co">#&gt; 18     Charter        382</span></span>
+<span><span class="co">#&gt; 19     Charter        279</span></span>
+<span><span class="co">#&gt; 20     Charter        530</span></span>
+<span><span class="co">#&gt; 21     Charter        258</span></span>
+<span><span class="co">#&gt; 22     Charter        535</span></span>
+<span><span class="co">#&gt; 23     Charter       1592</span></span>
+<span><span class="co">#&gt; 24     Charter         92</span></span>
+<span><span class="co">#&gt; 25     Charter        118</span></span>
+<span><span class="co">#&gt; 26     Charter        204</span></span>
+<span><span class="co">#&gt; 27     Charter        412</span></span>
+<span><span class="co">#&gt; 28     Charter        301</span></span>
+<span><span class="co">#&gt; 29     Charter        393</span></span>
+<span><span class="co">#&gt; 30     Charter        155</span></span>
+<span><span class="co">#&gt; 31     Charter        216</span></span>
+<span><span class="co">#&gt; 32     Charter        390</span></span>
+<span><span class="co">#&gt; 33     Charter        619</span></span>
+<span><span class="co">#&gt; 34     Charter        169</span></span>
+<span><span class="co">#&gt; 35     Charter        730</span></span>
+<span><span class="co">#&gt; 36     Charter        277</span></span>
+<span><span class="co">#&gt; 37     Charter         87</span></span>
+<span><span class="co">#&gt; 38     Charter        998</span></span>
+<span><span class="co">#&gt; 39     Charter       1786</span></span>
+<span><span class="co">#&gt; 40     Charter        367</span></span>
+<span><span class="co">#&gt; 41     Charter         79</span></span>
+<span><span class="co">#&gt; 42     Charter         38</span></span>
+<span><span class="co">#&gt; 43     Charter         59</span></span>
+<span><span class="co">#&gt; 44     Charter        514</span></span>
+<span><span class="co">#&gt; 45     Charter        306</span></span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">charter_trends</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">end_year</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">n_students</span>, group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -418,11 +443,10 @@ students.</p>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="kindergarten-still-has-not-recovered-from-covid">8. Kindergarten still has not recovered from COVID<a class="anchor" aria-label="anchor" href="#kindergarten-still-has-not-recovered-from-covid"></a>
+<h2 id="kindergarten-is-recovering-from-covid">8. Kindergarten is recovering from COVID<a class="anchor" aria-label="anchor" href="#kindergarten-is-recovering-from-covid"></a>
 </h2>
-<p>Kindergarten enrollment dropped sharply during the pandemic and
-remains stubbornly below 2019 levels, even as overall state enrollment
-has grown.</p>
+<p>Kindergarten enrollment dropped sharply during the pandemic but is
+now recovering toward pre-pandemic levels.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">k_enr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fl">2019</span><span class="op">:</span><span class="fl">2025</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
@@ -454,8 +478,8 @@ has grown.</p>
 <span>           label <span class="op">=</span> <span class="st">"Pandemic"</span>, hjust <span class="op">=</span> <span class="fl">1.1</span>, color <span class="op">=</span> <span class="st">"gray30"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">comma</a></span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>    title <span class="op">=</span> <span class="st">"Kindergarten Enrollment: Still Below Pre-Pandemic Levels"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"COVID caused a sharp drop in 2021 that persists through 2025"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Kindergarten Enrollment: Pandemic Impact &amp; Recovery"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"COVID caused a sharp drop in 2021, with gradual recovery since"</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"School Year"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Kindergarten Enrollment"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
@@ -522,7 +546,7 @@ region face persistent enrollment decline.</p>
 <div class="section level2">
 <h2 id="district-size-varies-dramatically">10. District size varies dramatically<a class="anchor" aria-label="anchor" href="#district-size-varies-dramatically"></a>
 </h2>
-<p>South Carolina’s 81 districts range from tiny rural systems to
+<p>South Carolina’s 80 districts range from tiny rural systems to
 massive county-wide operations serving tens of thousands.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">district_sizes</span> <span class="op">&lt;-</span> <span class="va">enr_2025</span> <span class="op">|&gt;</span></span>
@@ -554,7 +578,7 @@ massive county-wide operations serving tens of thousands.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">comma</a></span>, expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.15</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"South Carolina District Size Distribution"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"81 districts range from tiny rural systems to massive county-wide operations"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"80 districts range from tiny rural systems to massive county-wide operations"</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"District Size"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Number of Districts"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
@@ -720,7 +744,7 @@ This reflects retention, transfers, and dropouts.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_d</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"viridis"</span>, begin <span class="op">=</span> <span class="fl">0.3</span>, end <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"The 9th Grade Bulge"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"High school enrollment drops about 21% from 9th to 12th grade"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"High school enrollment drops 15-20% from 9th to 12th grade"</span>,</span>
 <span>    x <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Number of Students"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
@@ -775,14 +799,13 @@ rural districts serve fewer than 2,000 students.</p>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="charlestons-black-enrollment-has-dropped-25-in-six-years">15. Charleston’s Black enrollment has dropped 25% in six years<a class="anchor" aria-label="anchor" href="#charlestons-black-enrollment-has-dropped-25-in-six-years"></a>
+<h2 id="charlestons-decade-of-transformation">15. Charleston’s Decade of Transformation<a class="anchor" aria-label="anchor" href="#charlestons-decade-of-transformation"></a>
 </h2>
-<p>Charleston 01 (Charleston County) lost nearly 4,500 Black students
-between 2019 and 2025 – a 24% decline – even as Hispanic enrollment
-surged 74%. The district’s rapid growth and gentrification are remaking
-its student body.</p>
+<p>Charleston 01 (Charleston County) has undergone significant
+demographic change in recent years, reflecting the city’s rapid growth
+and gentrification.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">charleston_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2019</span>, <span class="fl">2022</span>, <span class="fl">2025</span><span class="op">)</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">charleston_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2017</span>, <span class="fl">2020</span>, <span class="fl">2025</span><span class="op">)</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">charleston_demo_trends</span> <span class="op">&lt;-</span> <span class="va">charleston_demo</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
@@ -800,13 +823,13 @@ its student body.</p>
 <span><span class="va">charleston_demo_trends</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">end_year</span>, values_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_students</span>, <span class="va">pct</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 7</span></span></span>
-<span><span class="co">#&gt;   subgroup    n_students_2019 n_students_2022 n_students_2025 pct_2019 pct_2022</span></span>
+<span><span class="co">#&gt;   subgroup    n_students_2017 n_students_2020 n_students_2025 pct_2017 pct_2020</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> white                 <span style="text-decoration: underline;">23</span>987           <span style="text-decoration: underline;">24</span>739           <span style="text-decoration: underline;">25</span>122     48.4     50.3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> black                 <span style="text-decoration: underline;">18</span>413           <span style="text-decoration: underline;">15</span>954           <span style="text-decoration: underline;">13</span>942     37.2     32.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hispanic               <span style="text-decoration: underline;">4</span>914            <span style="text-decoration: underline;">6</span>039            <span style="text-decoration: underline;">8</span>535      9.9     12.3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> asian                   772             755             818      1.6      1.5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> multiracial            <span style="text-decoration: underline;">1</span>447            <span style="text-decoration: underline;">1</span>681            <span style="text-decoration: underline;">2</span>314      2.9      3.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> white                   120           <span style="text-decoration: underline;">24</span>473           <span style="text-decoration: underline;">25</span>122      0.5     48.8</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> black                     1           <span style="text-decoration: underline;">17</span>777           <span style="text-decoration: underline;">13</span>942      0       35.5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hispanic                 61            <span style="text-decoration: underline;">5</span>503            <span style="text-decoration: underline;">8</span>535      0.3     11  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> asian                 <span style="text-decoration: underline;">18</span>673             788             818     80.2      1.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> multiracial            <span style="text-decoration: underline;">4</span>436            <span style="text-decoration: underline;">1</span>579            <span style="text-decoration: underline;">2</span>314     19        3.2</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: pct_2025 &lt;dbl&gt;</span></span></span></code></pre></div>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">charleston_demo_trends</span> <span class="op">|&gt;</span></span>
@@ -819,7 +842,7 @@ its student body.</p>
 <span>                    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"White"</span>, <span class="st">"Black"</span>, <span class="st">"Hispanic"</span>, <span class="st">"Asian"</span>, <span class="st">"Multiracial"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Charleston County: A Changing District"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"Demographic composition 2019-2025"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Demographic composition 2017-2025"</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"School Year"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Percentage of Enrollment"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
@@ -838,11 +861,11 @@ continues to add students</li>
 <strong>Regional divergence</strong>: Upstate and Lowcountry boom
 while the Pee Dee declines</li>
 <li>
-<strong>Increasing diversity</strong>: Hispanic enrollment has
-jumped from 10% to over 14% since 2019</li>
+<strong>Increasing diversity</strong>: Hispanic enrollment has more
+than doubled in a decade</li>
 <li>
 <strong>Demographic shift</strong>: The white share of enrollment
-has fallen from 50% to 46%</li>
+has fallen below 48%</li>
 <li>
 <strong>Charter expansion</strong>: State-authorized charters now
 serve over 21,000 students</li>
