@@ -19,7 +19,7 @@ districts in the Palmetto State.
 ## 1. South Carolina is growing
 
 Unlike many states facing enrollment decline, South Carolina has added
-approximately 50,000 students since 2015. The Palmetto State’s
+approximately 40,000 students since 2015. The Palmetto State’s
 population growth is reflected in its schools.
 
 ``` r
@@ -112,8 +112,8 @@ top_districts |>
 
 ## 3. Hispanic enrollment is surging
 
-Hispanic student enrollment has more than doubled over the past decade,
-growing from about 7% to over 12% of total enrollment.
+Hispanic student enrollment has risen steadily, growing from about 10%
+in 2019 to over 14% of total enrollment in 2025.
 
 ``` r
 demographics <- enr_2025 |>
@@ -417,10 +417,11 @@ charter_trends |>
 
 ------------------------------------------------------------------------
 
-## 8. Kindergarten is recovering from COVID
+## 8. Kindergarten has not recovered from COVID
 
-Kindergarten enrollment dropped sharply during the pandemic but is now
-recovering toward pre-pandemic levels.
+Kindergarten enrollment dropped sharply during the pandemic and has not
+returned to pre-pandemic levels, declining each year since a partial
+rebound in 2022.
 
 ``` r
 k_enr <- fetch_enr_multi(2019:2025, use_cache = TRUE)
@@ -455,8 +456,8 @@ k_trends |>
            label = "Pandemic", hjust = 1.1, color = "gray30") +
   scale_y_continuous(labels = scales::comma) +
   labs(
-    title = "Kindergarten Enrollment: Pandemic Impact & Recovery",
-    subtitle = "COVID caused a sharp drop in 2021, with gradual recovery since",
+    title = "Kindergarten Enrollment: Pandemic Impact & Continued Decline",
+    subtitle = "COVID caused a sharp drop in 2021; enrollment has declined each year since 2022",
     x = "School Year",
     y = "Kindergarten Enrollment"
   )
@@ -872,8 +873,8 @@ South Carolina’s school enrollment data reveals:
   students
 - **Regional divergence**: Upstate and Lowcountry boom while the Pee Dee
   declines
-- **Increasing diversity**: Hispanic enrollment has more than doubled in
-  a decade
+- **Increasing diversity**: Hispanic enrollment has risen from about 10%
+  to over 14% since 2019
 - **Demographic shift**: The white share of enrollment has fallen below
   48%
 - **Charter expansion**: State-authorized charters now serve over 21,000

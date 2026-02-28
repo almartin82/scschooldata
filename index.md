@@ -24,7 +24,7 @@ insights waiting to be explored:
 ### 1. South Carolina is growing
 
 Unlike many states facing enrollment decline, South Carolina has added
-approximately 50,000 students since 2015. The Palmetto State’s
+approximately 40,000 students since 2015. The Palmetto State’s
 population growth is reflected in its schools.
 
 ``` r
@@ -83,8 +83,8 @@ Top 10 South Carolina Districts by Enrollment (2025)
 
 ### 3. Hispanic enrollment is surging
 
-Hispanic student enrollment has more than doubled over the past decade,
-growing from about 7% to over 12% of total enrollment.
+Hispanic student enrollment has risen steadily, growing from about 10%
+in 2019 to over 14% of total enrollment in 2025.
 
 ``` r
 demographics <- enr_2025 |>
@@ -238,10 +238,11 @@ Charter District Growth (2015-2025)
 
 ------------------------------------------------------------------------
 
-### 8. Kindergarten is recovering from COVID
+### 8. Kindergarten has not recovered from COVID
 
-Kindergarten enrollment dropped sharply during the pandemic but is now
-recovering toward pre-pandemic levels.
+Kindergarten enrollment dropped sharply during the pandemic and has not
+returned to pre-pandemic levels, declining each year since a partial
+rebound in 2022.
 
 ``` r
 k_enr <- fetch_enr_multi(2019:2025, use_cache = TRUE)
@@ -258,10 +259,10 @@ stopifnot(nrow(k_trends) > 0)
 k_trends
 ```
 
-![Kindergarten Enrollment: Pandemic Impact &
-Recovery](https://almartin82.github.io/scschooldata/articles/enrollment_hooks_files/figure-html/k-chart-1.png)
+![Kindergarten Enrollment: Pandemic Impact & Continued
+Decline](https://almartin82.github.io/scschooldata/articles/enrollment_hooks_files/figure-html/k-chart-1.png)
 
-Kindergarten Enrollment: Pandemic Impact & Recovery
+Kindergarten Enrollment: Pandemic Impact & Continued Decline
 
 ------------------------------------------------------------------------
 

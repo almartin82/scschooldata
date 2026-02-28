@@ -80,7 +80,7 @@ data (2015-2025). Nearly 800,000 students attend public schools across
 <h2 id="south-carolina-is-growing">1. South Carolina is growing<a class="anchor" aria-label="anchor" href="#south-carolina-is-growing"></a>
 </h2>
 <p>Unlike many states facing enrollment decline, South Carolina has
-added approximately 50,000 students since 2015. The Palmetto State’s
+added approximately 40,000 students since 2015. The Palmetto State’s
 population growth is reflected in its schools.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">enr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2015</span>, <span class="fl">2017</span>, <span class="fl">2019</span>, <span class="fl">2021</span>, <span class="fl">2023</span>, <span class="fl">2025</span><span class="op">)</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -164,8 +164,8 @@ Southeast.</p>
 <div class="section level2">
 <h2 id="hispanic-enrollment-is-surging">3. Hispanic enrollment is surging<a class="anchor" aria-label="anchor" href="#hispanic-enrollment-is-surging"></a>
 </h2>
-<p>Hispanic student enrollment has more than doubled over the past
-decade, growing from about 7% to over 12% of total enrollment.</p>
+<p>Hispanic student enrollment has risen steadily, growing from about
+10% in 2019 to over 14% of total enrollment in 2025.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">demographics</span> <span class="op">&lt;-</span> <span class="va">enr_2025</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>,</span>
@@ -443,10 +443,11 @@ students.</p>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="kindergarten-is-recovering-from-covid">8. Kindergarten is recovering from COVID<a class="anchor" aria-label="anchor" href="#kindergarten-is-recovering-from-covid"></a>
+<h2 id="kindergarten-has-not-recovered-from-covid">8. Kindergarten has not recovered from COVID<a class="anchor" aria-label="anchor" href="#kindergarten-has-not-recovered-from-covid"></a>
 </h2>
-<p>Kindergarten enrollment dropped sharply during the pandemic but is
-now recovering toward pre-pandemic levels.</p>
+<p>Kindergarten enrollment dropped sharply during the pandemic and has
+not returned to pre-pandemic levels, declining each year since a partial
+rebound in 2022.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">k_enr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fl">2019</span><span class="op">:</span><span class="fl">2025</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
@@ -478,8 +479,8 @@ now recovering toward pre-pandemic levels.</p>
 <span>           label <span class="op">=</span> <span class="st">"Pandemic"</span>, hjust <span class="op">=</span> <span class="fl">1.1</span>, color <span class="op">=</span> <span class="st">"gray30"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">comma</a></span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>    title <span class="op">=</span> <span class="st">"Kindergarten Enrollment: Pandemic Impact &amp; Recovery"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"COVID caused a sharp drop in 2021, with gradual recovery since"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Kindergarten Enrollment: Pandemic Impact &amp; Continued Decline"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"COVID caused a sharp drop in 2021; enrollment has declined each year since 2022"</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"School Year"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Kindergarten Enrollment"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
@@ -861,8 +862,8 @@ continues to add students</li>
 <strong>Regional divergence</strong>: Upstate and Lowcountry boom
 while the Pee Dee declines</li>
 <li>
-<strong>Increasing diversity</strong>: Hispanic enrollment has more
-than doubled in a decade</li>
+<strong>Increasing diversity</strong>: Hispanic enrollment has risen
+from about 10% to over 14% since 2019</li>
 <li>
 <strong>Demographic shift</strong>: The white share of enrollment
 has fallen below 48%</li>
