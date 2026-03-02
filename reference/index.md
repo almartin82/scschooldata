@@ -24,6 +24,15 @@ Functions for transforming and analyzing enrollment data
 - [`enr_grade_aggs()`](https://almartin82.github.io/scschooldata/reference/enr_grade_aggs.md)
   : Custom Enrollment Grade Level Aggregates
 
+## Fetch Directory Data
+
+Functions for downloading school directory data from SCDE
+
+- [`fetch_directory()`](https://almartin82.github.io/scschooldata/reference/fetch_directory.md)
+  : Fetch South Carolina school directory data
+- [`clear_directory_cache()`](https://almartin82.github.io/scschooldata/reference/clear_directory_cache.md)
+  : Clear school directory cache
+
 ## Caching
 
 Functions for managing cached data
