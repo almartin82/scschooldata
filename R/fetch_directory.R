@@ -152,7 +152,8 @@ get_raw_directory <- function(end_year) {
         url,
         httr::write_disk(tname, overwrite = TRUE),
         httr::timeout(180),
-        httr::user_agent("scschooldata R package")
+        httr::user_agent("scschooldata R package"),
+        httr::config(ssl_verifypeer = FALSE)
       )
 
       if (!httr::http_error(response) && file.info(tname)$size > 10000) {
