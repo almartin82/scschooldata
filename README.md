@@ -123,7 +123,7 @@ charter_pct
 | **Enrollment** | 2013-2025 | `fetch_enr()` / `fetch_enr_multi()` | State, district, school. Race, gender, econ disadv |
 | Assessments | — | — | Not yet available |
 | Graduation | — | — | Not yet available |
-| Directory | — | — | Not yet available |
+| **Directory** | 2018-2025 | `fetch_directory()` | School, district. Principal, superintendent, address, phone, website |
 | Per-Pupil Spending | — | — | Not yet available |
 | Accountability | — | — | Not yet available |
 | Chronic Absence | — | — | Not yet available |
