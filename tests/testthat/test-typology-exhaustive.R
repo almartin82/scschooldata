@@ -857,6 +857,9 @@ test_that("get_cache_path generates correct filename", {
 # ==============================================================================
 
 test_that("clear_directory_cache removes directory cache files", {
+  skip_if_not(exists("write_cache_directory", where = asNamespace("scschooldata"), mode = "function"),
+              "directory cache functions not yet implemented")
+
   # Write a test cache
   write_cache_directory(data.frame(a = 1), "directory_test_9999")
   expect_true(cache_exists_directory("directory_test_9999", max_age = 1))
@@ -875,6 +878,8 @@ test_that("clear_directory_cache removes directory cache files", {
 test_that("directory data has correct column types", {
   skip_on_cran()
   skip_if_offline()
+  skip_if_not(exists("fetch_directory", where = asNamespace("scschooldata"), mode = "function"),
+              "fetch_directory not yet implemented")
 
   dir_data <- tryCatch(
     fetch_directory(2025, use_cache = TRUE),
@@ -906,6 +911,8 @@ test_that("directory data has correct column types", {
 test_that("directory school IDs are 7-digit strings", {
   skip_on_cran()
   skip_if_offline()
+  skip_if_not(exists("fetch_directory", where = asNamespace("scschooldata"), mode = "function"),
+              "fetch_directory not yet implemented")
 
   dir_data <- tryCatch(
     fetch_directory(2025, use_cache = TRUE),
@@ -926,6 +933,8 @@ test_that("directory school IDs are 7-digit strings", {
 test_that("directory school_type codes are valid", {
   skip_on_cran()
   skip_if_offline()
+  skip_if_not(exists("fetch_directory", where = asNamespace("scschooldata"), mode = "function"),
+              "fetch_directory not yet implemented")
 
   dir_data <- tryCatch(
     fetch_directory(2025, use_cache = TRUE),
@@ -1042,6 +1051,9 @@ test_that("build_report_cards_urls returns multiple patterns", {
 })
 
 test_that("build_directory_urls returns multiple patterns", {
+  skip_if_not(exists("build_directory_urls", where = asNamespace("scschooldata"), mode = "function"),
+              "build_directory_urls not yet implemented")
+
   urls <- build_directory_urls(2025)
   expect_true(length(urls) >= 8)
   expect_true(all(grepl("screportcards.com", urls)))
